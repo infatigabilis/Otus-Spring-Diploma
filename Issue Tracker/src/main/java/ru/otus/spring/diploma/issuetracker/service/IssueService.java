@@ -9,10 +9,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
-import ru.otus.spring.diploma.issuetracker.domain.Issue;
-import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.db.dpo.IssueDpo;
 import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
+import ru.otus.spring.diploma.issuetracker.domain.Issue;
+import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.utils.CommonUtils;
 
 import javax.validation.Valid;

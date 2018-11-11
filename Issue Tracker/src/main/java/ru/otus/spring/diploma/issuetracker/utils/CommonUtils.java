@@ -1,8 +1,6 @@
 package ru.otus.spring.diploma.issuetracker.utils;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.spring.diploma.issuetracker.exception.BusinessRuleViolationException;
 import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Create;
 
 import javax.validation.constraints.NotBlank;
