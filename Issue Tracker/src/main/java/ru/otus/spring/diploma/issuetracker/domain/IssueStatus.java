@@ -1,7 +1,6 @@
 package ru.otus.spring.diploma.issuetracker.domain;
 
 import lombok.Getter;
-import ru.otus.spring.diploma.issuetracker.exception.BusinessRuleViolationException;
 
 import java.util.List;
 
@@ -45,19 +44,4 @@ public enum IssueStatus {
 
     @Getter
     private List<IssueStatus> next;
-
-
-    public static void checkOnPossibilityOfChanging(IssueStatus from, IssueStatus to) {
-        if (from == null) {
-            return;
-        }
-
-        if (to == null) {
-            throw new BusinessRuleViolationException("Status flow violation: Status to change cannot be null");
-        }
-
-        if (!from.getBack().contains(to) && !from.getNext().contains(to)) {
-            throw new BusinessRuleViolationException("Status flow violation: Status " + from + " cannot be changed to " + to);
-        }
-    }
 }

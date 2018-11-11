@@ -14,6 +14,8 @@ import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.utils.CommonUtils;
+import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Create;
+import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Edit;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +23,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Create;
 
 @Service
 @Validated
@@ -70,7 +71,8 @@ public class IssueService {
         return issueRepository.save(IssueDpo.fromDomain(issue)).then();
     }
 
-    public Mono<Void> editIssue(@NotBlank String originalIssueVisibleId, Issue diffIssue) {
+    @Validated(Edit.class)
+    public Mono<Void> editIssue(@NotBlank String originalIssueVisibleId, @Valid Issue diffIssue) {
         return issueRepository.findByVisibleId(originalIssueVisibleId).flatMap(issue -> {
             commonUtils.mergeObjects(issue, IssueDpo.fromDomain(diffIssue), IssueDpo.class);
             commonUtils.validate(issue);

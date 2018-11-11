@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Create;
+import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Edit;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import javax.validation.groups.Default;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Issue {
 
-    @NotBlank(groups = Default.class) @Null(groups = Create.class)
+    @NotBlank(groups = Default.class) @Null(groups = {Create.class, Edit.class})
     private String id;
 
     @NotBlank(groups = {Default.class, Create.class})
@@ -35,13 +36,6 @@ public class Issue {
 
     @NotNull(groups = {Default.class, Create.class})
     private User assignee;
-
-
-    public void setStatus(IssueStatus status) {
-        IssueStatus.checkOnPossibilityOfChanging(this.status, status);
-        this.status = status;
-    }
-
 
 
     @AllArgsConstructor

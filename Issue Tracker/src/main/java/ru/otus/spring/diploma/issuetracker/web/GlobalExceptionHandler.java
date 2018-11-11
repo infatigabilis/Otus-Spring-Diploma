@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
 
 
     @Data @Builder
-    private static class ExceptionEntity {
+    public static class ExceptionEntity {
         private final int status;
         private final Exception exception;
         private final String message;

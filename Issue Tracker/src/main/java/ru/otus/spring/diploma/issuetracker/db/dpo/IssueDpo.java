@@ -27,15 +27,6 @@ public class IssueDpo {
     private String assigneeId;
 
 
-    public void setStatusOrdinal(Integer statusOrdinal) {
-        IssueStatus.checkOnPossibilityOfChanging(
-                this.statusOrdinal != null ? IssueStatus.values()[this.statusOrdinal] : null,
-                statusOrdinal != null ? IssueStatus.values()[statusOrdinal] : null
-        );
-        this.statusOrdinal = statusOrdinal;
-    }
-
-
     public static IssueDpo fromDomain(Issue domain) {
         val dpo = new IssueDpo();
         BeanUtils.copyProperties(domain, dpo);
