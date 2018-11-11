@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  mongo:
+    container_name: mongo-db
+    image: mongo
+    restart: always
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: test
+#      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - 27017:27017
+#    volumes:
+#      - otus-spring-hw31-db-local:/var/lib/postgresql/data
+
+#volumes:
+#  otus-spring-hw31-db-local:
+#    external: true
