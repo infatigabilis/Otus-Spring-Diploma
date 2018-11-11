@@ -1,9 +1,11 @@
 package ru.otus.spring.diploma.issuetracker.web;
 
-import com.mongodb.DuplicateKeyException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,7 +24,6 @@ public class GlobalExceptionHandler {
         return e.getMessage();
     }
 
-//    FIXME: not callable
     @ExceptionHandler(BusinessRuleViolationException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public String businessRuleViolationException(BusinessRuleViolationException e) {
@@ -30,7 +31,6 @@ public class GlobalExceptionHandler {
         return e.getMessage();
     }
 
-//    FIXME: not callable
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public String commonBadRequestException(DuplicateKeyException e) {
@@ -39,8 +39,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-    public void commonException(Exception e) {
+    public ResponseEntity<String> commonException(Exception e) {
+        if (ExceptionUtils.getRootCause(e) instanceof BusinessRuleViolationException) {
+            return ResponseEntity.status(400).body(businessRuleViolationException((BusinessRuleViolationException) ExceptionUtils.getRootCause(e)));
+        }
+
         logger.error("Unexpected exception", e);
+        return ResponseEntity.status(500).build();
     }
 }

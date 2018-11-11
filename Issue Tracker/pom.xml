@@ -26,6 +26,8 @@
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
         <apache-commons.version>3.8.1</apache-commons.version>
         <apache-commons-beanutils.version>1.9.3</apache-commons-beanutils.version>
+        <google-guava.version>27.0-jre</google-guava.version>
+        <mongobee.version>0.13</mongobee.version>
     </properties>
 
     <dependencies>
@@ -63,6 +65,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.mongobee</groupId>
+            <artifactId>mongobee</artifactId>
+            <version>${mongobee.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${apache-commons.version}</version>
@@ -71,6 +79,11 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>${apache-commons-beanutils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${google-guava.version}</version>
         </dependency>
 
         <dependency>
@@ -130,8 +143,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 
 </project>

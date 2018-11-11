@@ -12,8 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 @Component
 @Validated
 public class CommonUtils {
-    private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
-
     private final BeanUtilsBean beanUtilsBean = new BeanUtilsBean() {
         @Override
         public void copyProperty(Object dest, String name, Object value) throws IllegalAccessException, InvocationTargetException {
@@ -23,12 +21,11 @@ public class CommonUtils {
         }
     };
 
-    public <T> void mergeObjects(T origin, T diff, Class<T> clazzForTypeCheck) {
+    public <T> void mergeObjects(T origin, T diff, Class<T> classForTypeCheck) {
         try {
             beanUtilsBean.copyProperties(origin, diff);
 
         } catch (IllegalAccessException | InvocationTargetException e) {
-            logger.error("Failed to merge object", e);
             throw new RuntimeException(e);
         }
     }

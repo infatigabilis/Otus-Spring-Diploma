@@ -1,4 +1,4 @@
-package ru.otus.spring.diploma.issuetracker.dpo;
+package ru.otus.spring.diploma.issuetracker.db.dpo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,6 @@ import org.springframework.util.Assert;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.IssueStatus;
 import ru.otus.spring.diploma.issuetracker.domain.User;
-import ru.otus.spring.diploma.issuetracker.exception.BusinessRuleViolationException;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @Document
