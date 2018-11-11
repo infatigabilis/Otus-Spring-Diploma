@@ -22,4 +22,18 @@ public class CommonControllerTest extends AbstractControllerTest {
                     .jsonPath("$.timestamp").isNotEmpty()
                     .jsonPath("$.message").isNotEmpty();
     }
+
+    @Test
+    public void getSwagger() {
+        testClient.get().uri("/v2/api-docs")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    public void getSwaggerUi() {
+        testClient.get().uri("swagger-ui.html")
+                .exchange()
+                .expectStatus().isOk();
+    }
 }

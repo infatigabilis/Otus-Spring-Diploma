@@ -29,6 +29,7 @@
         <google-guava.version>27.0-jre</google-guava.version>
         <mongobee.version>0.13</mongobee.version>
         <mockito.version>2.23.0</mockito.version>
+        <springfox.version>3.0.0-SNAPSHOT</springfox.version>
     </properties>
 
     <dependencies>
@@ -69,6 +70,21 @@
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
             <version>${mongobee.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-webflux</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.version}</version>
         </dependency>
 
         <dependency>
@@ -114,16 +130,19 @@
             <scope>test</scope>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.restdocs</groupId>-->
-            <!--<artifactId>spring-restdocs-mockmvc</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
             <!--<groupId>org.springframework.security</groupId>-->
             <!--<artifactId>spring-security-test</artifactId>-->
             <!--<scope>test</scope>-->
         <!--</dependency>-->
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jcenter-snapshots</id>
+            <name>jcenter</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
