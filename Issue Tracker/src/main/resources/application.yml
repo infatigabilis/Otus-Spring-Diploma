@@ -1,3 +1,10 @@
+spring:
+  application:
+    name: issue-tracker
+  data:
+    mongodb:
+      uri: mongodb://localhost/test
+
 server:
   ssl:
     key-store: classpath:keystore/otus-spring-diploma_issue-tracker.p12
@@ -5,14 +12,12 @@ server:
     key-alias: otus-spring-diploma_issue-tracker
     key-store-password: secret
 
-logging:
-  level:
-    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
-
-spring:
-  data:
-    mongodb:
-      uri: mongodb://localhost/test
-
 mongobee:
   enabled: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
