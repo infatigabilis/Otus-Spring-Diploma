@@ -1,11 +1,14 @@
 package ru.otus.spring.diploma.issuetracker.utils;
 
+import com.netflix.hystrix.exception.HystrixBadRequestException;
 import org.apache.commons.beanutils.BeanUtilsBean;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 @Component
 @Validated
@@ -30,5 +33,17 @@ public class CommonUtils {
 
     public <T> void validate(@Valid T bean) {
 
+    }
+
+    public void logFallback(Logger logger, String methodName, List<Object> params, Throwable cause) {
+        logger.error("Fallback invocation for {}({})", methodName, params.stream().reduce((p1, p2) -> p1 + ", " + p2).orElse(""), cause);
+    }
+
+    public void ignoreFallbackException(Throwable cause, Class<? extends Exception>... classes) {
+        for (Class<? extends Exception> clazz : classes) {
+            if (cause.getClass().equals(clazz)) {
+                throw new HystrixBadRequestException("Ignored exception", cause);
+            }
+        }
     }
 }

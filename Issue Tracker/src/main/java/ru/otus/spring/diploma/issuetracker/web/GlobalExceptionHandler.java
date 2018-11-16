@@ -1,5 +1,6 @@
 package ru.otus.spring.diploma.issuetracker.web;
 
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebInputException;
 import ru.otus.spring.diploma.issuetracker.exception.BusinessRuleViolationException;
+import ru.otus.spring.diploma.issuetracker.exception.ExternalServiceUnavailableException;
 
 import javax.validation.ConstraintViolationException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -42,6 +45,21 @@ public class GlobalExceptionHandler {
     public ExceptionEntity commonBadRequestException(Exception e) {
         logger.warn("Common bad request exception: {}", e.getMessage());
         return ExceptionEntity.builder().status(400).exception(e).message(e.getMessage()).build();
+    }
+
+    @ExceptionHandler(ExternalServiceUnavailableException.class)
+    @ResponseStatus(code = INTERNAL_SERVER_ERROR)
+    public ExceptionEntity externalServiceUnavailableException(ExternalServiceUnavailableException e) {
+        return ExceptionEntity.builder().status(500).exception(e).message("Some external service is unavailable. Please contact our support").build();
+    }
+
+    @ExceptionHandler(HystrixRuntimeException.class)
+    public ResponseEntity<ExceptionEntity> hystrixRuntimeException(HystrixRuntimeException e) {
+        if (e.getCause() instanceof DuplicateKeyException) {
+            return ResponseEntity.status(400).body(commonBadRequestException((DuplicateKeyException) e.getCause()));
+        } else {
+            return commonException((Exception) e.getCause());
+        }
     }
 
     @ExceptionHandler(Exception.class)

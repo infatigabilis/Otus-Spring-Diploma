@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.val;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -28,7 +27,7 @@ public class IssueDpo {
 
 
     public static IssueDpo fromDomain(Issue domain) {
-        val dpo = new IssueDpo();
+        final var dpo = new IssueDpo();
         BeanUtils.copyProperties(domain, dpo);
 
         dpo.setAssigneeId(domain.getAssignee() != null ? domain.getAssignee().getId() : null);
@@ -39,7 +38,7 @@ public class IssueDpo {
     }
 
     public Issue toDomain(User assignee) {
-        val domain = new Issue();
+        final var domain = new Issue();
         BeanUtils.copyProperties(this, domain);
 
         Assert.isTrue(assigneeId.equals(assignee.getId()), "Issue assignee ids not equals: " + assigneeId + ", " + assignee.getId());

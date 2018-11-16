@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mongobee.changeset.ChangeLog;
 import com.github.mongobee.changeset.ChangeSet;
-import lombok.val;
 import org.jongo.Jongo;
 import ru.otus.spring.diploma.issuetracker.db.dpo.IssueDpo;
 
@@ -29,7 +28,7 @@ public class DbChangelog {
 
     @ChangeSet(order = "001", id = "001", author = "dev")
     public void _001(Jongo jongo) {
-        val collection = jongo.getCollection("issueDpo");
+        final var collection = jongo.getCollection("issueDpo");
 
         collection.insert(toSpringDocument(
                 new IssueDpo(null, "OTUS-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "1")

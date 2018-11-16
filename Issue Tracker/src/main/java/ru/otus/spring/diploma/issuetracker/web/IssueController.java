@@ -1,6 +1,5 @@
 package ru.otus.spring.diploma.issuetracker.web;
 
-import lombok.val;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +37,7 @@ public class IssueController {
             @RequestParam(required = false) Sort.Direction priorityDirection,
             @RequestParam(required = false) Sort.Direction statusDirection) {
 
-        val exampleIssue = Issue.builder()
+        final var exampleIssue = Issue.builder()
                 .assignee(User.builder().id(assigneeId).build())
                 .build();
 

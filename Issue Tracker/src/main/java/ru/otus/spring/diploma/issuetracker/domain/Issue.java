@@ -15,7 +15,9 @@ import javax.validation.groups.Default;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Issue {
 
-    @NotBlank(groups = Default.class) @Null(groups = {Create.class, Edit.class})
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @NotBlank(groups = Default.class)
+    @Null(groups = {Create.class, Edit.class})
     private String id;
 
     @NotBlank(groups = {Default.class, Create.class})

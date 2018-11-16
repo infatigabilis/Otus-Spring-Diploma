@@ -1,6 +1,5 @@
 package ru.otus.spring.diploma.issuetracker.web;
 
-import lombok.val;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +136,7 @@ public class IssueControllerTest extends AbstractControllerTest {
 
     @Test
     public void create() {
-        val newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, user2);
+        final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, user2);
 
         testClient.post()
                 .uri("/issues").body(Mono.just(newIssue), Issue.class)
@@ -165,7 +164,7 @@ public class IssueControllerTest extends AbstractControllerTest {
                     .jsonPath("$.exception").isEqualTo("javax.validation.ConstraintViolationException")
                     .jsonPath("$.timestamp").isNotEmpty()
                     .consumeWith(byteRes -> {
-                        val res = new String(byteRes.getResponseBody(), UTF_8);
+                        final var res = new String(byteRes.getResponseBody(), UTF_8);
 
                         Assert.isTrue(res.contains("createIssue.issue.id: must be null"));
                         Assert.isTrue(res.contains("createIssue.issue.visibleId: must not be blank"));
