@@ -5,19 +5,19 @@ spring:
     mongodb:
       uri: mongodb://localhost/test
 
-server:
-  ssl:
-    key-store: classpath:keystore/otus-spring-diploma_issue-tracker.p12
-    key-store-type: PKCS12
-    key-alias: otus-spring-diploma_issue-tracker
-    key-store-password: secret
+#server:
+#  ssl:
+#    key-store: classpath:keystore/otus-spring-diploma_issue-tracker.p12
+#    key-store-type: PKCS12
+#    key-alias: otus-spring-diploma_issue-tracker
+#    key-store-password: secret
 
 mongobee:
   enabled: true
 
 eureka:
   client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+    service-url:
+      default-zone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
-    preferIpAddress: true
+    prefer-ip-address: true

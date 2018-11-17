@@ -1,0 +1,30 @@
+server:
+  port: 8762
+#  ssl:
+#    key-store: classpath:keystore/otus-spring-diploma_load-balancer.p12
+#    key-store-type: PKCS12
+#    key-alias: otus-spring-diploma_load-balancer
+#    key-store-password: secret
+
+spring:
+  application:
+    name: load-balancer
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, routes
+
+#issue-tracker:
+#  ribbon:
+#    IsSecure: true
+#    TrustStore: classpath:truststore/otus-spring-diploma_issue-tracker.p12
+#    TrustStorePassword: secret
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      default-zone: ${EUREKA_URI:http://localhost:8761/eureka}
