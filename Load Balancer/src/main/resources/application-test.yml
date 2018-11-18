@@ -1,0 +1,5 @@
+eureka:
+  client:
+    should-enforce-registration-at-init: true
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka

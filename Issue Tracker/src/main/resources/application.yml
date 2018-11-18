@@ -3,7 +3,7 @@ spring:
     name: issue-tracker
   data:
     mongodb:
-      uri: mongodb://localhost/test
+      uri: mongodb://test:secret@localhost/test?authSource=admin
 
 #server:
 #  ssl:
@@ -16,8 +16,8 @@ mongobee:
   enabled: true
 
 eureka:
-  client:
-    service-url:
-      default-zone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
     prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://service-registry:8761/eureka

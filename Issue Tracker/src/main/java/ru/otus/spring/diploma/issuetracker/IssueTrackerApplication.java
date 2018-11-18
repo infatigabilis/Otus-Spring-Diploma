@@ -13,6 +13,12 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 public class IssueTrackerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(IssueTrackerApplication.class, args);
+        try {
+            SpringApplication.run(IssueTrackerApplication.class, args);
+
+        } catch (Exception e) {
+            System.out.println("Exit because of application failed to start");
+            System.exit(-1);
+        }
     }
 }

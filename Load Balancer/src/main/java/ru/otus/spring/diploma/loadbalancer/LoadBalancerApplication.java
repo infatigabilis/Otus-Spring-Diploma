@@ -11,6 +11,12 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 public class LoadBalancerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LoadBalancerApplication.class, args);
+		try {
+			SpringApplication.run(LoadBalancerApplication.class, args);
+
+		} catch (Exception e) {
+			System.out.println("Exit because of application failed to start");
+			System.exit(-1);
+		}
 	}
 }

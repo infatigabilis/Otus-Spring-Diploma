@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://test:secret@mongo-db/test?authSource=admin
+
+eureka:
+  client:
+    should-enforce-registration-at-init: true
+    serviceUrl:
+      defaultZone: http://service-registry:8761/eureka
