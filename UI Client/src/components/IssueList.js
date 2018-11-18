@@ -10,13 +10,12 @@ import green from "@material-ui/core/colors/green";
 import Chip from "@material-ui/core/Chip/Chip";
 import Icon from "@material-ui/core/Icon/Icon";
 import IconButton from "@material-ui/core/IconButton/IconButton";
+import Paper from "@material-ui/core/Paper/Paper";
+import red from "@material-ui/core/colors/red";
 
 const theme = createMuiTheme();
 
 const styles = {
-  list: {
-    backgroundColor: theme.palette.background.paper
-  },
   listItem: {
     paddingBottom: 4
   },
@@ -55,7 +54,7 @@ const styles = {
 export default class IssueList extends Component {
   render() {
     return (
-      <React.Fragment>
+      <Paper>
         <AppBar position="static" color="primary">
           <Toolbar variant="dense">
             <Grid container alignItems={'center'}>
@@ -75,7 +74,7 @@ export default class IssueList extends Component {
             </Grid>
           </Toolbar>
         </AppBar>
-        <List component="nav" style={styles.list}>
+        <List component="nav">
           <ListItem button style={styles.listItem}>
             <Grid container>
               <Grid item xs={2}>
@@ -85,7 +84,7 @@ export default class IssueList extends Component {
                 <Typography variant="subtitle1" style={styles.issueTitle}>Spring Data MongoDB</Typography>
               </Grid>
               <Grid item xs={1} style={styles.issueStateGrid}>
-                <Icon style={styles.priorityIcon} color="error">expand_less</Icon>
+                <Icon style={Object.assign({}, styles.priorityIcon, {color: red["200"]})} color="error">expand_less</Icon>
               </Grid>
               <Grid item xs={2} style={styles.issueStateGrid}>
                 <Chip label="DEVELOPMENT" style={styles.chip} variant="outlined" clickable={true} />
@@ -101,7 +100,7 @@ export default class IssueList extends Component {
                 <Typography variant="subtitle1" style={styles.issueTitle}>Spring Cloud: Config Server, Service Registry</Typography>
               </Grid>
               <Grid item xs={1} style={styles.issueStateGrid}>
-                <Icon style={styles.highPriorityIcon} color="error">arrow_upward</Icon>
+                <Icon style={Object.assign({}, styles.highPriorityIcon, {color: red["900"]})} color="error">arrow_upward</Icon>
               </Grid>
               <Grid item xs={2} style={styles.issueStateGrid}>
                 <Chip label="REVIEW" style={styles.chip} variant="outlined" clickable={true} />
@@ -117,7 +116,7 @@ export default class IssueList extends Component {
                 <Typography variant="subtitle1" style={styles.issueTitle}>Spring Batch</Typography>
               </Grid>
               <Grid item xs={1} style={styles.issueStateGrid}>
-                <Icon style={Object.assign({}, styles.priorityIcon, {color: green["500"]})} >expand_more</Icon>
+                <Icon style={Object.assign({}, styles.priorityIcon, {color: green["200"]})} >expand_more</Icon>
               </Grid>
               <Grid item xs={2} style={styles.issueStateGrid}>
                 <Chip label="NEW" style={styles.chip} variant="outlined" clickable={true} />
@@ -125,7 +124,7 @@ export default class IssueList extends Component {
             </Grid>
           </ListItem>
         </List>
-      </React.Fragment>
+      </Paper>
     );
   }
 }
