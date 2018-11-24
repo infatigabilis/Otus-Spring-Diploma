@@ -191,7 +191,7 @@ export default class Issue extends Component {
                   variant="outlined"
                   color="inherit"
                   style={styles.editButton}
-                  onClick={() => this.props.history.push(`/${this.state.issue.visibleId}/edit`)}
+                  onClick={() => this.props.history.push(`${document.location.pathname}/edit`)}
                 >
                   Edit
                 </Button>

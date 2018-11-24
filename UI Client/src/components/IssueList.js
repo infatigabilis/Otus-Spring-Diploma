@@ -167,7 +167,7 @@ export default class IssueList extends Component {
             <ListItem
               key={issue.visibleId}
               button style={styles.listItem}
-              onClick={() => this.props.history.push(`/${issue.visibleId}`)}
+              onClick={() => this.props.history.push(`/dashboard/${issue.visibleId}`)}
               selected={this.props.match.params.issueId === issue.visibleId}
             >
               <Grid container>

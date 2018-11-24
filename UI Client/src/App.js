@@ -11,6 +11,7 @@ import Switch from "react-router-dom/Switch";
 import Route from "react-router-dom/Route";
 import EmptyWorkspace from "./components/EmptyWorkspace";
 import CreateIssue from "./components/CreateIssue";
+import Review from "./components/Review";
 
 const styles = {
   root: {
@@ -33,13 +34,17 @@ export default class App extends Component {
 
           <Grid container spacing={24} style={styles.root}>
             <Grid item xs={5} style={styles.grid}>
-              <Route path='/:issueId?' component={IssueList} />
+              <Switch>
+                <Route path='/review/:issueId?' component={Review} />
+                <Route path='/dashboard/:issueId?' component={IssueList} />
+                <Route path='/' component={IssueList} />
+              </Switch>
             </Grid>
             <Grid item xs={7} style={styles.grid}>
               <Switch>
                 <Route path='/create' component={CreateIssue} />
-                <Route path='/:issueId/edit' component={EditIssue} />
-                <Route path='/:issueId' component={Issue} />
+                <Route path='/(review|dashboard)/:issueId/edit' component={EditIssue} />
+                <Route path='/(review|dashboard)/:issueId' component={Issue} />
                 <Route path='/' component={EmptyWorkspace} />
               </Switch>
             </Grid>

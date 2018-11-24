@@ -83,8 +83,8 @@ export default class TopBar extends Component {
                             <MenuItem onClick={() => this.props.history.push('/')}>
                               Dashboard
                             </MenuItem>
-                            <MenuItem onClick={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}>
-                              Review all
+                            <MenuItem onClick={() => this.props.history.push('/review')}>
+                              Review
                             </MenuItem>
                             <MenuItem
                               style={styles.createIssueMenuItem}

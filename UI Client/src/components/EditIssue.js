@@ -89,7 +89,7 @@ export default class EditIssue extends Component {
       body: JSON.stringify(this.state.issue)
     })
       .then(res => {
-        if (res.status === 200) this.props.history.push(`/${this.state.issue.visibleId}`);
+        if (res.status === 200) this.props.history.push(document.location.pathname.split('/').slice(0, 3).join('/'));
         else return res.json()
       })
       .then(errorRes => this.setState({hasRequestError: true, error: errorRes}))
@@ -142,7 +142,7 @@ export default class EditIssue extends Component {
                   <Button
                     color="inherit"
                     style={styles.saveButton}
-                    onClick={() => this.props.history.push(`/${this.state.issue.visibleId}`)}
+                    onClick={() => this.props.history.push(document.location.pathname.split('/').slice(0, 3).join('/'))}
                   >
                     Back
                   </Button>

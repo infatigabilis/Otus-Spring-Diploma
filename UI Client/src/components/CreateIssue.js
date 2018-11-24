@@ -95,7 +95,7 @@ export default class CreateIssue extends Component {
       body: JSON.stringify(this.state.issue)
     })
       .then(res => {
-        if (res.status === 200) this.props.history.push(`/${this.state.issue.visibleId}`);
+        if (res.status === 200) this.props.history.push(`/dashboard/${this.state.issue.visibleId}`);
         else return res.json()
       })
       .then(errorRes => this.setState({hasRequestError: true, error: errorRes}))
