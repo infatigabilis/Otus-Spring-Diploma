@@ -23,7 +23,7 @@ export default class EmptyWorkspace extends Component {
     return (
       <div style={styles.rootDiv}>
         <div style={styles.textDiv}>
-          <Typography variant="h4" style={styles.text}>Please select any issue from left list</Typography>
+          <Typography variant="h4" style={styles.text}>Choose issue from left menu to see it details</Typography>
         </div>
       </div>
     );
