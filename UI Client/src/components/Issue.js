@@ -82,6 +82,8 @@ export default class Issue extends Component {
   state = {
     assigneeMenuOpen: false,
     issue: {
+      priority: 'VERY_LOW',
+      status: '',
       assignee: {}
     }
   };

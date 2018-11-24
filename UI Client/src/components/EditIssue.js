@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField/TextField";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
+import config from "../config";
 
 const styles = {
   saveButtonGrid: {
@@ -36,17 +37,57 @@ const allLabels = [
 
 export default class EditIssue extends Component {
   state = {
-    visibleId: 'OTUS-12',
-    title: 'Spring Cloud: Config Server, Service Registry, Proxy',
-    desc: 'Sample desc',
-    assignee: 1,
-    status: 'NEW',
-    priority: 'MEDIUM',
-    labels: ['One', "Three"]
+    issue: {
+      visibleId: '',
+      title: '',
+      description: '',
+      status: '',
+      priority: '',
+      assignee: {
+        id: ''
+      },
+      labels: []
+    }
   };
 
+  loadData(issueId) {
+    fetch(`${config.host}/issue-tracker/issues/${issueId}`)
+      .then(res => res.json())
+      .then(res => this.setState({issue: Object.assign({}, res, {id: null})}))
+  }
+
+  pushData() {
+    fetch(`${config.host}/issue-tracker/issues/${this.state.issue.visibleId}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(this.state.issue)
+    })
+      .then(() => this.props.history.push(`/${this.state.issue.visibleId}`))
+  }
+
+  componentDidMount() {
+    this.loadData(this.props.match.params.issueId)
+  }
+
+  componentWillReceiveProps(props, context) {
+    this.loadData(props.match.params.issueId)
+  }
+
   handleSelectChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    const field = event.target.name;
+    const value = event.target.value;
+
+    if (event.target.name === 'assignee-id') {
+      this.setState(state => {
+        state.issue.assignee.id = value;
+        return state;
+      });
+    } else {
+      this.setState(state => {
+        state.issue[field] = value;
+        return state;
+      });
+    }
   };
 
   render() {
@@ -56,12 +97,17 @@ export default class EditIssue extends Component {
           <Toolbar variant="dense">
             <Grid container alignItems={'center'}>
               <Grid item xs={10}>
-                <Typography variant="h6" color="inherit">
-                  Edit issue
-                </Typography>
+                <Typography variant="h6" color="inherit">[{this.state.issue.visibleId}] Edit</Typography>
               </Grid>
               <Grid item xs={2} style={styles.saveButtonGrid}>
-                <Button variant="outlined" color="inherit" style={styles.saveButton}>Save</Button>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  style={styles.saveButton}
+                  onClick={() => this.pushData()}
+                >
+                  Save
+                </Button>
               </Grid>
             </Grid>
           </Toolbar>
@@ -70,18 +116,9 @@ export default class EditIssue extends Component {
         <div style={styles.rootDiv}>
           <TextField
             id="standard-name"
-            label="Id"
-            fullWidth
-            value={this.state.visibleId}
-            onChange={this.handleSelectChange}
-            margin="normal"
-            inputProps={{name: 'visibleId'}}
-          />
-          <TextField
-            id="standard-name"
             label="Title"
             fullWidth
-            value={this.state.title}
+            value={this.state.issue.title}
             onChange={this.handleSelectChange}
             margin="normal"
             inputProps={{name: 'title'}}
@@ -91,18 +128,18 @@ export default class EditIssue extends Component {
             label="Description"
             fullWidth
             multiline
-            value={this.state.desc}
+            value={this.state.issue.description}
             onChange={this.handleSelectChange}
             margin="normal"
-            inputProps={{name: 'desc'}}
+            inputProps={{name: 'description'}}
           />
 
           <FormControl style={styles.select}>
             <InputLabel>Assignee</InputLabel>
             <Select
-              value={this.state.assignee}
+              value={this.state.issue.assignee.id}
               onChange={this.handleSelectChange}
-              inputProps={{name: 'assignee'}}
+              inputProps={{name: 'assignee-id'}}
             >
               <MenuItem value={1}>Scott Matthews</MenuItem>
               <MenuItem value={2}>Jake Moore</MenuItem>
@@ -115,7 +152,7 @@ export default class EditIssue extends Component {
           <FormControl style={styles.select}>
             <InputLabel>Priority</InputLabel>
             <Select
-              value={this.state.priority}
+              value={this.state.issue.priority}
               onChange={this.handleSelectChange}
               inputProps={{name: 'priority'}}
             >
@@ -131,7 +168,7 @@ export default class EditIssue extends Component {
           <FormControl style={styles.select}>
             <InputLabel>Status</InputLabel>
             <Select
-              value={this.state.status}
+              value={this.state.issue.status}
               onChange={this.handleSelectChange}
               inputProps={{name: 'status'}}
             >
@@ -140,6 +177,8 @@ export default class EditIssue extends Component {
               <MenuItem value={'DEVELOPMENT'}>Development</MenuItem>
               <MenuItem value={'REVIEW'}>Review</MenuItem>
               <MenuItem value={'DEPLOYMENT'}>Deployment</MenuItem>
+              <MenuItem value={'FEEDBACK'}>Feedback</MenuItem>
+              <MenuItem value={'TESTING'}>Testing</MenuItem>
               <MenuItem value={'DONE'}>Done</MenuItem>
               <MenuItem value={'CLOSED'}>Closed</MenuItem>
             </Select>
@@ -150,7 +189,7 @@ export default class EditIssue extends Component {
             <InputLabel>Labels</InputLabel>
             <Select
               multiple
-              value={this.state.labels}
+              value={this.state.issue.labels ? this.state.issue.labels : []}
               onChange={this.handleSelectChange}
               inputProps={{name: 'labels'}}
             >

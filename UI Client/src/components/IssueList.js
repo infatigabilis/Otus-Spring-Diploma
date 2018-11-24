@@ -75,6 +75,10 @@ export default class IssueList extends Component {
     this.loadData()
   }
 
+  componentWillReceiveProps(props, context) {
+    this.loadData()
+  }
+
   getPriorityIcon(priorityName) {
     switch (priorityName) {
       case 'VERY_LOW': return (
