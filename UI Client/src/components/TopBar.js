@@ -80,15 +80,24 @@ export default class TopBar extends Component {
                       <Paper>
                         <ClickAwayListener onClickAway={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}>
                           <MenuList>
-                            <MenuItem onClick={() => this.props.history.push('/')}>
+                            <MenuItem onClick={event => {
+                              this.props.history.push('/');
+                              this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")
+                            }}>
                               Dashboard
                             </MenuItem>
-                            <MenuItem onClick={() => this.props.history.push('/review')}>
+                            <MenuItem onClick={event => {
+                              this.props.history.push('/review');
+                              this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")
+                            }}>
                               Review
                             </MenuItem>
                             <MenuItem
                               style={styles.createIssueMenuItem}
-                              onClick={() => this.props.history.push('/create')}
+                              onClick={event => {
+                                this.props.history.push('/create');
+                                this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")
+                              }}
                             >
                               Create new
                             </MenuItem>

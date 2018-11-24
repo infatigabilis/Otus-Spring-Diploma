@@ -28,6 +28,7 @@ services:
       - otus-spring-diploma-maven-reps:/root/.m2
     depends_on:
       - service-registry
+      - issue-tracker
 
   issue-tracker:
     container_name: issue-tracker
@@ -43,6 +44,21 @@ services:
       - mongo-db
       - service-registry
 
+  ui-client:
+    container_name: ui-client
+    build: "./UI Client"
+    ports:
+    - 80:80
+    volumes:
+    - otus-spring-diploma-npm-reps:/app/node_modules
+    depends_on:
+    - mongo-db
+    - service-registry
+    - load-balancer
+    - issue-tracker
+
 volumes:
   otus-spring-diploma-maven-reps:
+    external: true
+  otus-spring-diploma-npm-reps:
     external: true
