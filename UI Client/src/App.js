@@ -25,10 +25,10 @@ export default class App extends Component {
 
         <Grid container spacing={24} style={styles.root}>
           <Grid item xs={5} style={styles.grid}>
-            <IssueList/>
+            <IssueList />
           </Grid>
           <Grid item xs={7} style={styles.grid}>
-            <Issue/>
+            <Issue />
           </Grid>
         </Grid>
 

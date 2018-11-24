@@ -30,3 +30,8 @@
     transform: rotate(360deg);
   }
 }
+
+#comment-div textarea:disabled {
+  color: #212121;
+  font-size: 0.875rem;
+}
