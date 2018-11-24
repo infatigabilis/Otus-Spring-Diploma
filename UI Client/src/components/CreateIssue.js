@@ -13,7 +13,10 @@ import Select from "@material-ui/core/Select/Select";
 import config from "../config";
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import Modal from "@material-ui/core/Modal/Modal";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Divider from "@material-ui/core/Divider/Divider";
+
+const theme = createMuiTheme();
 
 const styles = {
   saveButtonGrid: {
@@ -56,8 +59,9 @@ const allLabels = [
   'Four',
 ];
 
-export default class EditIssue extends Component {
+export default class CreateIssue extends Component {
   state = {
+    hasErrors: false,
     hasRequestError: false,
     issue: {
       visibleId: '',
@@ -73,15 +77,21 @@ export default class EditIssue extends Component {
     error: {}
   };
 
-  loadData(issueId) {
-    fetch(`${config.host}/issue-tracker/issues/${issueId}`)
-      .then(res => res.json())
-      .then(res => this.setState({issue: Object.assign({}, res, {id: null})}))
-  }
-
   pushData = () => {
-    fetch(`${config.host}/issue-tracker/issues/${this.state.issue.visibleId}`, {
-      method: 'PUT',
+    if (
+      !this.state.issue.visibleId ||
+      !this.state.issue.title ||
+      !this.state.issue.description ||
+      !this.state.issue.status ||
+      !this.state.issue.priority ||
+      !this.state.issue.assignee.id
+    ) {
+      this.setState({hasErrors: true});
+      return;
+    }
+
+    fetch(`${config.host}/issue-tracker/issues`, {
+      method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(this.state.issue)
     })
@@ -91,14 +101,6 @@ export default class EditIssue extends Component {
       })
       .then(errorRes => this.setState({hasRequestError: true, error: errorRes}))
   };
-
-  componentDidMount() {
-    this.loadData(this.props.match.params.issueId)
-  }
-
-  componentWillReceiveProps(props, context) {
-    this.loadData(props.match.params.issueId)
-  }
 
   handleSelectChange = event => {
     const field = event.target.name;
@@ -118,14 +120,6 @@ export default class EditIssue extends Component {
   };
 
   render() {
-    if (this.state.issue.visibleId === '') {
-      return (
-        <div style={styles.loaderDiv}>
-          <CircularProgress />
-        </div>
-      )
-    }
-
     return (
       <React.Fragment>
         <Paper>
@@ -133,23 +127,16 @@ export default class EditIssue extends Component {
             <Toolbar variant="dense">
               <Grid container alignItems={'center'}>
                 <Grid item xs={10}>
-                  <Typography variant="h6" color="inherit">[{this.state.issue.visibleId}] Edit</Typography>
+                  <Typography variant="h6" color="inherit">Creating new issue</Typography>
                 </Grid>
                 <Grid item xs={2} style={styles.saveButtonGrid}>
-                  <Button
-                    color="inherit"
-                    style={styles.saveButton}
-                    onClick={() => this.props.history.push(`/${this.state.issue.visibleId}`)}
-                  >
-                    Back
-                  </Button>
                   <Button
                     variant="outlined"
                     color="inherit"
                     style={styles.saveButton}
                     onClick={this.pushData}
                   >
-                    Save
+                    Create
                   </Button>
                 </Grid>
               </Grid>
@@ -158,14 +145,28 @@ export default class EditIssue extends Component {
 
           <div style={styles.rootDiv}>
             <TextField
+              error={this.state.hasErrors && !this.state.issue.visibleId}
+              label="Id"
+              fullWidth
+              required
+              value={this.state.issue.visibleId}
+              onChange={this.handleSelectChange}
+              margin="normal"
+              inputProps={{name: 'visibleId'}}
+            />
+            <TextField
+              error={this.state.hasErrors && !this.state.issue.title}
               label="Title"
               fullWidth
+              required
               value={this.state.issue.title}
               onChange={this.handleSelectChange}
               margin="normal"
               inputProps={{name: 'title'}}
             />
             <TextField
+              error={this.state.hasErrors && !this.state.issue.description}
+              required
               label="Description"
               fullWidth
               multiline
@@ -176,8 +177,9 @@ export default class EditIssue extends Component {
             />
 
             <FormControl style={styles.select}>
-              <InputLabel>Assignee</InputLabel>
+              <InputLabel>Assignee *</InputLabel>
               <Select
+                error={this.state.hasErrors && !this.state.issue.assignee.id}
                 value={this.state.issue.assignee.id}
                 onChange={this.handleSelectChange}
                 inputProps={{name: 'assignee-id'}}
@@ -191,8 +193,9 @@ export default class EditIssue extends Component {
             <br/>
 
             <FormControl style={styles.select}>
-              <InputLabel>Priority</InputLabel>
+              <InputLabel>Priority *</InputLabel>
               <Select
+                error={this.state.hasErrors && !this.state.issue.priority}
                 value={this.state.issue.priority}
                 onChange={this.handleSelectChange}
                 inputProps={{name: 'priority'}}
@@ -207,8 +210,9 @@ export default class EditIssue extends Component {
             <br/>
 
             <FormControl style={styles.select}>
-              <InputLabel>Status</InputLabel>
+              <InputLabel>Status *</InputLabel>
               <Select
+                error={this.state.hasErrors && !this.state.issue.status}
                 value={this.state.issue.status}
                 onChange={this.handleSelectChange}
                 inputProps={{name: 'status'}}
@@ -262,7 +266,6 @@ export default class EditIssue extends Component {
           </div>
         </Modal>
       </React.Fragment>
-
     );
   }
 }

@@ -10,6 +10,7 @@ import BrowserRouter from "react-router-dom/BrowserRouter";
 import Switch from "react-router-dom/Switch";
 import Route from "react-router-dom/Route";
 import EmptyWorkspace from "./components/EmptyWorkspace";
+import CreateIssue from "./components/CreateIssue";
 
 const styles = {
   root: {
@@ -36,6 +37,7 @@ export default class App extends Component {
             </Grid>
             <Grid item xs={7} style={styles.grid}>
               <Switch>
+                <Route path='/create' component={CreateIssue} />
                 <Route path='/:issueId/edit' component={EditIssue} />
                 <Route path='/:issueId' component={Issue} />
                 <Route path='/' component={EmptyWorkspace} />

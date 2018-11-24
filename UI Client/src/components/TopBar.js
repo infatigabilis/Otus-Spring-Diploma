@@ -88,7 +88,7 @@ export default class TopBar extends Component {
                             </MenuItem>
                             <MenuItem
                               style={styles.createIssueMenuItem}
-                              onClick={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}
+                              onClick={() => this.props.history.push('/create')}
                             >
                               Create new
                             </MenuItem>
