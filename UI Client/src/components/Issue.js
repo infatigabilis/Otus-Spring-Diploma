@@ -17,6 +17,9 @@ import red from "@material-ui/core/colors/red";
 import Icon from "@material-ui/core/Icon/Icon";
 import Divider from "@material-ui/core/Divider/Divider";
 import Chip from "@material-ui/core/Chip/Chip";
+import config from "../config";
+import green from "@material-ui/core/colors/green";
+import orange from "@material-ui/core/es/colors/orange";
 
 const styles = {
   editButtonGrid: {
@@ -56,7 +59,8 @@ const styles = {
     padding: 10
   },
   infoItemDiv: {
-    display: 'flex'
+    display: 'flex',
+    alignItems: 'center'
   },
   statusIcon: {
     fontSize: 20
@@ -77,10 +81,23 @@ const styles = {
 export default class Issue extends Component {
   state = {
     assigneeMenuOpen: false,
+    issue: {
+      assignee: {}
+    }
   };
 
+  loadData(issueId) {
+    fetch(`${config.host}/issue-tracker/issues/${issueId}`)
+      .then(res => res.json())
+      .then(res => this.setState({issue: res}))
+  }
+
   componentDidMount() {
-    console.log('Received props.issueId: ' + this.props.match.params.issueId)
+    this.loadData(this.props.match.params.issueId)
+  }
+
+  componentWillReceiveProps(props, context) {
+    this.loadData(props.match.params.issueId)
   }
 
   handleMenuToggle = (menuOpen) => {
@@ -101,6 +118,47 @@ export default class Issue extends Component {
     });
   };
 
+  getPriorityFragment() {
+    switch (this.state.issue.priority) {
+      case 'VERY_LOW': return (
+        <React.Fragment>
+          <Icon style={Object.assign({}, styles.statusIcon, {color: green["900"]})} >arrow_downward</Icon>
+          <Typography>Very Low</Typography>
+        </React.Fragment>
+      );
+
+      case 'LOW': return (
+        <React.Fragment>
+          <Icon style={Object.assign({}, styles.statusIcon, {color: green["200"]})} >expand_more</Icon>
+          <Typography>Low</Typography>
+        </React.Fragment>
+      );
+
+      case 'MEDIUM': return (
+        <React.Fragment>
+          <Icon style={Object.assign({}, styles.statusIcon, {color: orange["500"]})}>remove</Icon>
+          <Typography>Medium</Typography>
+        </React.Fragment>
+      );
+
+      case 'HIGH': return (
+        <React.Fragment>
+          <Icon style={Object.assign({}, styles.statusIcon, {color: red["200"]})}>expand_less</Icon>
+          <Typography>High</Typography>
+        </React.Fragment>
+      );
+
+      case 'VERY_HIGH': return (
+        <React.Fragment>
+          <Icon style={Object.assign({}, styles.statusIcon, {color: red["900"]})}>arrow_upward</Icon>
+          <Typography>Very High</Typography>
+        </React.Fragment>
+      );
+
+      default: console.log("Unexpected priority: " + this.state.issue.priority)
+    }
+  }
+
   render() {
     const { assigneeMenuOpen } = this.state;
 
@@ -111,11 +169,18 @@ export default class Issue extends Component {
             <Grid container alignItems={'center'}>
               <Grid item xs={10}>
                 <Typography variant="h6" color="inherit">
-                  [OTUS-12] &nbsp;Spring Cloud: Config Server, Service Registry, Proxy
+                  [{this.state.issue.visibleId}] &nbsp;{this.state.issue.title}
                 </Typography>
               </Grid>
               <Grid item xs={2} style={styles.editButtonGrid}>
-                <Button variant="outlined" color="inherit" style={styles.editButton}>Edit</Button>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  style={styles.editButton}
+                  onClick={() => this.props.history.push(`/${this.state.issue.visibleId}/edit`)}
+                >
+                  Edit
+                </Button>
               </Grid>
             </Grid>
           </Toolbar>
@@ -124,7 +189,7 @@ export default class Issue extends Component {
         <Grid container alignItems={'center'} style={styles.statusAssigneeGrid}>
           <Grid item xs={10}>
             <Button color="secondary" style={styles.statusButton}>To Analise</Button>
-            <Button variant="contained" color="primary" style={styles.statusButton}>Development</Button>
+            <Button variant="contained" color="primary" style={styles.statusButton}>{this.state.issue.status}</Button>
             <Button variant="outlined" style={styles.nextStatusButton}>To Review</Button>
             <Button variant="outlined" style={styles.nextStatusButton}>To Testing</Button>
           </Grid>
@@ -136,7 +201,7 @@ export default class Issue extends Component {
               aria-haspopup="true"
               onClick={() => this.handleMenuToggle("assigneeMenuOpen")}
             >
-              <span style={styles.assigneeSpan}>Jake Moore</span>
+              <span style={styles.assigneeSpan}>{this.state.issue.assignee.name}</span>
             </Button>
             <Popper open={assigneeMenuOpen} anchorEl={this.assigneeMenuAnchor} transition>
               {({ TransitionProps }) => (
@@ -170,8 +235,7 @@ export default class Issue extends Component {
             <Grid item xs={6}>
               <div style={styles.infoItemDiv}>
                 <Typography variant="subtitle1" style={styles.infoTitle}>Priority:</Typography>
-                <Icon style={Object.assign({}, styles.statusIcon, {color: red["900"]})} color="error">arrow_upward</Icon>
-                <Typography>Very High</Typography>
+                {this.getPriorityFragment()}
               </div>
             </Grid>
             <Grid item xs={6}>
@@ -201,9 +265,7 @@ export default class Issue extends Component {
         </div>
 
         <div style={styles.descDiv}>
-          <Typography align="justify">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ante massa, aliquet sed enim vel, commodo ultricies est. Pellentesque scelerisque turpis tortor, id semper tellus venenatis in. Curabitur mollis leo a mi consequat commodo. Fusce mauris turpis, commodo eget arcu elementum, faucibus ultricies nisi. In eget rutrum arcu, bibendum imperdiet tortor. Nunc in congue leo. Proin molestie sem enim, vel euismod sem sodales ut. Vivamus dignissim erat urna, non feugiat diam vulputate ut. Donec vitae dui interdum, vulputate sapien nec, convallis magna. Sed rhoncus odio eget tristique mollis. Duis venenatis metus non neque pulvinar, id vulputate nisl lacinia.
-          </Typography>
+          <Typography align="justify">{this.state.issue.description}</Typography>
         </div>
 
         <Divider />

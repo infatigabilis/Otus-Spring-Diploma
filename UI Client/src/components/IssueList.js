@@ -75,10 +75,6 @@ export default class IssueList extends Component {
     this.loadData()
   }
 
-  componentWillUpdate(props, state, context) {
-    this.loadData();
-  }
-
   getPriorityIcon(priorityName) {
     switch (priorityName) {
       case 'VERY_LOW': return (
@@ -120,17 +116,17 @@ export default class IssueList extends Component {
       this.setState(prev => {
         prev[stateField] = 'DESC';
         return prev;
-      })
+      }, this.loadData)
     } else if (this.state[stateField] === 'DESC') {
       this.setState(prev => {
         prev[stateField] = null;
         return prev;
-      })
+      }, this.loadData)
     } else {
       this.setState(prev => {
         prev[stateField] = 'ASC';
         return prev;
-      })
+      }, this.loadData)
     }
   }
 
@@ -164,7 +160,12 @@ export default class IssueList extends Component {
 
         <List component="nav">
           {this.state.issues.map(issue => (
-            <ListItem key={issue.visibleId} button style={styles.listItem}>
+            <ListItem
+              key={issue.visibleId}
+              button style={styles.listItem}
+              onClick={() => this.props.history.push(`/${issue.visibleId}`)}
+              selected={this.props.match.params.issueId === issue.visibleId}
+            >
               <Grid container>
                 <Grid item xs={2}>
                   <Typography variant="subtitle1"><b>{issue.visibleId}</b></Typography>
