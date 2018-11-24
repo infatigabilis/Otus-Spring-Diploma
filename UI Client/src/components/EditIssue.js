@@ -14,6 +14,9 @@ import config from "../config";
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import Modal from "@material-ui/core/Modal/Modal";
 import Divider from "@material-ui/core/Divider/Divider";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+
+const theme = createMuiTheme();
 
 const styles = {
   saveButtonGrid: {

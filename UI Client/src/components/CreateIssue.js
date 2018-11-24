@@ -11,7 +11,6 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import config from "../config";
-import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import Modal from "@material-ui/core/Modal/Modal";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Divider from "@material-ui/core/Divider/Divider";
