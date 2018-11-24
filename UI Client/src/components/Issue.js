@@ -79,6 +79,10 @@ export default class Issue extends Component {
     assigneeMenuOpen: false,
   };
 
+  componentDidMount() {
+    console.log('Received props.issueId: ' + this.props.match.params.issueId)
+  }
+
   handleMenuToggle = (menuOpen) => {
     this.setState(state => {
       state[menuOpen] = !state[menuOpen];
@@ -121,7 +125,7 @@ export default class Issue extends Component {
           <Grid item xs={10}>
             <Button color="secondary" style={styles.statusButton}>To Analise</Button>
             <Button variant="contained" color="primary" style={styles.statusButton}>Development</Button>
-            <Button variant="outlined" color="action" style={styles.nextStatusButton}>To Review</Button>
+            <Button variant="outlined" style={styles.nextStatusButton}>To Review</Button>
             <Button variant="outlined" style={styles.nextStatusButton}>To Testing</Button>
           </Grid>
 
@@ -165,14 +169,14 @@ export default class Issue extends Component {
           <Grid container style={styles.infoHorGrid}>
             <Grid item xs={6}>
               <div style={styles.infoItemDiv}>
-                <Typography variant="subtitle" style={styles.infoTitle}>Priority:</Typography>
+                <Typography variant="subtitle1" style={styles.infoTitle}>Priority:</Typography>
                 <Icon style={Object.assign({}, styles.statusIcon, {color: red["900"]})} color="error">arrow_upward</Icon>
                 <Typography>Very High</Typography>
               </div>
             </Grid>
             <Grid item xs={6}>
               <div style={styles.infoItemDiv}>
-                <Typography variant="subtitle" style={styles.infoTitle}>Labels:</Typography>
+                <Typography variant="subtitle1" style={styles.infoTitle}>Labels:</Typography>
                 <Chip variant="outlined" label="One" style={styles.labelChip} />
                 <Chip variant="outlined" label="Two" style={styles.labelChip} />
                 <Chip variant="outlined" label="Three" style={styles.labelChip} />
@@ -183,13 +187,13 @@ export default class Issue extends Component {
           <Grid container style={styles.infoHorGrid}>
             <Grid item xs={6}>
               <div style={styles.infoItemDiv}>
-                <Typography variant="subtitle" style={styles.infoTitle}>Epic:</Typography>
+                <Typography variant="subtitle1" style={styles.infoTitle}>Epic:</Typography>
                 <Typography>None</Typography>
               </div>
             </Grid>
             <Grid item xs={6}>
               <div style={styles.infoItemDiv}>
-                <Typography variant="subtitle" style={styles.infoTitle}>Sprint:</Typography>
+                <Typography variant="subtitle1" style={styles.infoTitle}>Sprint:</Typography>
                 <Typography>None</Typography>
               </div>
             </Grid>
