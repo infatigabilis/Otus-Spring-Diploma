@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import Paper from "@material-ui/core/Paper/Paper";
 import Toolbar from "@material-ui/core/Toolbar/Toolbar";
 import Typography from "@material-ui/core/Typography/Typography";
@@ -18,8 +17,6 @@ import red from "@material-ui/core/colors/red";
 import Icon from "@material-ui/core/Icon/Icon";
 import Divider from "@material-ui/core/Divider/Divider";
 import Chip from "@material-ui/core/Chip/Chip";
-
-const theme = createMuiTheme();
 
 const styles = {
   editButtonGrid: {

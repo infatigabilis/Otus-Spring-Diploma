@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid/Grid";
 import IssueList from "./components/IssueList";
 import Issue from "./components/Issue";
 import TopBar from "./components/TopBar";
+import EditIssue from "./components/EditIssue";
 
 const styles = {
   root: {
@@ -28,7 +29,7 @@ export default class App extends Component {
             <IssueList />
           </Grid>
           <Grid item xs={7} style={styles.grid}>
-            <Issue />
+            <EditIssue />
           </Grid>
         </Grid>
 
