@@ -28,7 +28,7 @@ export default class App extends Component {
         <React.Fragment>
           <CssBaseline />
 
-          <TopBar />
+          <Route component={TopBar} />
 
           <Grid container spacing={24} style={styles.root}>
             <Grid item xs={5} style={styles.grid}>

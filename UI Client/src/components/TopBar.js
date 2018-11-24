@@ -33,21 +33,12 @@ export default class TopBar extends Component {
   };
 
   handleMenuToggle = (menuOpen) => {
-    this.setState(state => {
-      state[menuOpen] = !state[menuOpen];
-      return state;
-    });
+    this.setState({[menuOpen]: !this.state[menuOpen]});
   };
 
   handleMenuClose = (event, menuAnchor, menuOpen) => {
-    if (menuAnchor.contains(event.target)) {
-      return;
-    }
-
-    this.setState(state => {
-      state[menuOpen] = !state[menuOpen];
-      return state;
-    });
+    if (menuAnchor.contains(event.target)) return;
+    this.setState({[menuOpen]: !this.state[menuOpen]});
   };
 
   render() {
@@ -89,7 +80,7 @@ export default class TopBar extends Component {
                       <Paper>
                         <ClickAwayListener onClickAway={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}>
                           <MenuList>
-                            <MenuItem onClick={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}>
+                            <MenuItem onClick={() => this.props.history.push('/')}>
                               Dashboard
                             </MenuItem>
                             <MenuItem onClick={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}>

@@ -11,6 +11,7 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import config from "../config";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 
 const styles = {
   saveButtonGrid: {
@@ -25,6 +26,12 @@ const styles = {
   select: {
     marginTop: 10,
     marginBottom: 10
+  },
+  loaderDiv: {
+    display: 'flex',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 };
 
@@ -56,14 +63,14 @@ export default class EditIssue extends Component {
       .then(res => this.setState({issue: Object.assign({}, res, {id: null})}))
   }
 
-  pushData() {
+  pushData = () => {
     fetch(`${config.host}/issue-tracker/issues/${this.state.issue.visibleId}`, {
       method: 'PUT',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(this.state.issue)
     })
       .then(() => this.props.history.push(`/${this.state.issue.visibleId}`))
-  }
+  };
 
   componentDidMount() {
     this.loadData(this.props.match.params.issueId)
@@ -91,6 +98,14 @@ export default class EditIssue extends Component {
   };
 
   render() {
+    if (this.state.issue.visibleId === '') {
+      return (
+        <div style={styles.loaderDiv}>
+          <CircularProgress />
+        </div>
+      )
+    }
+
     return (
       <Paper>
         <AppBar position="static" color="primary">
@@ -101,10 +116,17 @@ export default class EditIssue extends Component {
               </Grid>
               <Grid item xs={2} style={styles.saveButtonGrid}>
                 <Button
+                  color="inherit"
+                  style={styles.saveButton}
+                  onClick={() => this.props.history.push(`/${this.state.issue.visibleId}`)}
+                >
+                  Back
+                </Button>
+                <Button
                   variant="outlined"
                   color="inherit"
                   style={styles.saveButton}
-                  onClick={() => this.pushData()}
+                  onClick={this.pushData}
                 >
                   Save
                 </Button>

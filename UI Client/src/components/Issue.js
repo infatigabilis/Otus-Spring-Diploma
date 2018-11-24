@@ -20,6 +20,10 @@ import Chip from "@material-ui/core/Chip/Chip";
 import config from "../config";
 import green from "@material-ui/core/colors/green";
 import orange from "@material-ui/core/es/colors/orange";
+import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+
+const theme = createMuiTheme();
 
 const styles = {
   editButtonGrid: {
@@ -75,6 +79,15 @@ const styles = {
     fontSize: '9pt',
     height: 18,
     marginRight: 5
+  },
+  loaderDiv: {
+    display: 'flex',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  assigneeToMeButton: {
+    color: theme.palette.primary.main
   }
 };
 
@@ -94,7 +107,7 @@ export default class Issue extends Component {
       .then(res => this.setState({issue: res}))
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.loadData(this.props.match.params.issueId)
   }
 
@@ -103,21 +116,12 @@ export default class Issue extends Component {
   }
 
   handleMenuToggle = (menuOpen) => {
-    this.setState(state => {
-      state[menuOpen] = !state[menuOpen];
-      return state;
-    });
+    this.setState({[menuOpen]: !this.state[menuOpen]});
   };
 
   handleMenuClose = (event, menuAnchor, menuOpen) => {
-    if (menuAnchor.contains(event.target)) {
-      return;
-    }
-
-    this.setState(state => {
-      state[menuOpen] = !state[menuOpen];
-      return state;
-    });
+    if (menuAnchor.contains(event.target)) return;
+    this.setState({[menuOpen]: !this.state[menuOpen]});
   };
 
   getPriorityFragment() {
@@ -162,6 +166,14 @@ export default class Issue extends Component {
   }
 
   render() {
+    if (this.state.issue.visibleId === undefined) {
+      return (
+        <div style={styles.loaderDiv}>
+          <CircularProgress />
+        </div>
+      )
+    }
+
     const { assigneeMenuOpen } = this.state;
 
     return (
@@ -214,7 +226,7 @@ export default class Issue extends Component {
                   <Paper>
                     <ClickAwayListener onClickAway={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
                       <MenuList>
-                        <MenuItem onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
+                        <MenuItem style={styles.assigneeToMeButton} onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
                           Assign to me
                         </MenuItem>
                         <MenuItem onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
