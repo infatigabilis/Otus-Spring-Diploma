@@ -1,10 +1,18 @@
+server:
+  port: 0
+
 spring:
   data:
     mongodb:
       uri: mongodb://test:secret@mongo-db/test?authSource=admin
 
+security:
+  keycloak:
+    host: http://keycloak:8180
+
 eureka:
   client:
+    enabled: true
     should-enforce-registration-at-init: true
     serviceUrl:
       defaultZone: http://service-registry:8761/eureka

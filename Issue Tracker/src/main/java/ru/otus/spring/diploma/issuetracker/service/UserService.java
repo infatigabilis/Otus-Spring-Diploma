@@ -18,7 +18,7 @@ import java.util.Map;
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public final static User FALLBACK_USER = new User("unknown", "Unknown user (Internal Error)", "unknown.user@mail.com");
+    public final static User FALLBACK_USER = new User("unknown", "Unknown user (Internal Error)", "unknown.user@mail.com", null);
 
     private final CommonUtils commonUtils;
 
@@ -31,10 +31,10 @@ public class UserService {
     public Mono<User> getOne(@NotBlank String id) {
 //        TODO: remove stub
         final var stub = Map.of(
-                "1", new User("1", "Scott Matthews", "user1@mail.com"),
-                "2", new User("2", "Jake Moore", "user2@mail.com"),
-                "3", new User("3", "Javon Guzman", "user3@mail.com"),
-                "4", new User("4", "Robert Burke", "user4@mail.com")
+                "1", new User("1", "Scott Matthews", "user1@mail.com", "programming"),
+                "2", new User("2", "Jake Moore", "user2@mail.com", "programming"),
+                "3", new User("3", "Javon Guzman", "user3@mail.com", "programming"),
+                "4", new User("4", "Robert Burke", "user4@mail.com", "business")
         );
 
         final Mono<User> result = stub.containsKey(id) ? Mono.just(stub.get(id)) : Mono.empty();

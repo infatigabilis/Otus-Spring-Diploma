@@ -1,2 +1,8 @@
 mongobee:
   enabled: false
+
+security:
+  keycloak:
+    host: http://localhost:8180
+    realm: Otus-Spring-Diploma
+    client: otus-spring-diploma-client

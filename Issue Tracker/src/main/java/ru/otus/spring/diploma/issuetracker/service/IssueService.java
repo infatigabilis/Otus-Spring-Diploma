@@ -130,7 +130,7 @@ public class IssueService {
         return userService.getOne(dpo.getAssigneeId())
                 .switchIfEmpty(Mono.defer(() -> {
                     logger.error("User not found by id '{}' for issue '{}'", dpo.getAssigneeId(), dpo.getId());
-                    return Mono.just(new User(dpo.getAssigneeId(), "Deleted user", null));
+                    return Mono.just(new User(dpo.getAssigneeId(), "Deleted user", null, null));
                 }))
                 .map(dpo::toDomain);
     }

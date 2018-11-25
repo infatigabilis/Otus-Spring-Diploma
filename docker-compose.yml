@@ -10,6 +10,34 @@ services:
     ports:
       - 27017:27017
 
+  psql:
+    container_name: psql-db
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+    volumes:
+      - otus-spring-diploma-psql-db:/var/lib/postgresql/data
+
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:4.6.0.Final
+    environment:
+      KEYCLOAK_USER: test
+      KEYCLOAK_PASSWORD: secret
+      KEYCLOAK_IMPORT: /app/keycloak-realm-export.json
+      DB_VENDOR: postgres
+      DB_ADDR: psql-db
+    volumes:
+      - Keycloak/keycloak-realm-export.json:/app/keycloak-realm-export.json
+    ports:
+      - 8180:8080
+    depends_on:
+      - psql
+
   service-registry:
     container_name: service-registry
     build: "./Service Registry"
@@ -48,17 +76,19 @@ services:
     container_name: ui-client
     build: "./UI Client"
     ports:
-    - 80:80
+      - 80:80
     volumes:
-    - otus-spring-diploma-npm-reps:/app/node_modules
+      - otus-spring-diploma-npm-reps:/app/node_modules
     depends_on:
-    - mongo-db
-    - service-registry
-    - load-balancer
-    - issue-tracker
+      - mongo-db
+      - service-registry
+      - load-balancer
+      - issue-tracker
 
 volumes:
   otus-spring-diploma-maven-reps:
     external: true
   otus-spring-diploma-npm-reps:
+    external: true
+  otus-spring-diploma-psql-db:
     external: true

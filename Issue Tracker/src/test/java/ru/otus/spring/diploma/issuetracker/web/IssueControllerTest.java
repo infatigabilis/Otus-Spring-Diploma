@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Mono;
@@ -42,8 +43,8 @@ public class IssueControllerTest extends AbstractControllerTest {
     private UserService userService;
 
 
-    private final User user1 = new User("1", "Name1", "user1@mail.com");
-    private final User user2 = new User("2", "Name2", "user2@mail.com");
+    private final User user1 = new User("1", "Name1", "user1@mail.com", "programming");
+    private final User user2 = new User("2", "Name2", "user2@mail.com", "programming");
     private final Issue issue1 = new Issue(null, "OTUS-1", "Title1", "Desc1", DEVELOPMENT, HIGH, user1);
     private final Issue issue2 = new Issue(null, "OTUS-2", "Title2", "Desc2", DEVELOPMENT, MEDIUM, user2);
     private final Issue issue3 = new Issue(null, "OTUS-3", "Title3", "Desc3", DONE, MEDIUM, user2);
@@ -67,6 +68,7 @@ public class IssueControllerTest extends AbstractControllerTest {
 
 
     @Test
+    @WithMockUser
     public void getOne() {
         testClient.get()
                 .uri("/issues/" + issue1.getVisibleId() )
@@ -76,6 +78,15 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void getOne_authError() {
+        testClient.get()
+                .uri("/issues/" + issue1.getVisibleId() )
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    @WithMockUser
     public void getAll() {
         testClient.get()
                 .uri("/issues")
@@ -85,6 +96,15 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void getAll_authError() {
+        testClient.get()
+                .uri("/issues")
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    @WithMockUser
     public void getByAssignee() {
         testClient.get()
                 .uri(builder -> builder.path("/issues").queryParam("assigneeId", user1.getId()).build())
@@ -94,6 +114,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getByAssignee_withWrongAssignee() {
         testClient.get()
                 .uri(builder -> builder.path("/issues").queryParam("assigneeId", "123").build())
@@ -103,6 +124,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getAll_withSortByPriority() {
         testClient.get()
                 .uri(builder -> builder.path("/issues").queryParam("priorityDirection", "DESC").build())
@@ -112,6 +134,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getAll_withSortByStatus() {
         testClient.get()
                 .uri(builder -> builder.path("/issues").queryParam("statusDirection", "ASC").build())
@@ -121,6 +144,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void getByAssignee_withSort() {
         testClient.get()
                 .uri(builder -> builder.path("/issues")
@@ -135,6 +159,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void create() {
         final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, user2);
 
@@ -154,6 +179,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void create_validationError() {
         testClient.post()
                 .uri("/issues").body(Mono.just(new Issue("1", "", "Title12", "Desc12", null, VERY_HIGH, user2)), Issue.class)
@@ -173,6 +199,17 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void create_authError() {
+        final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, user2);
+
+        testClient.post()
+                .uri("/issues").body(Mono.just(newIssue), Issue.class)
+                .exchange()
+                .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    @WithMockUser
     public void create_duplicationVisibleIdError() {
         testClient.post()
                 .uri("/issues").body(Mono.just(new Issue(null, "OTUS-1", "Title12", "Desc12", NEW, VERY_HIGH, user2)), Issue.class)
@@ -186,6 +223,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void edit() {
         testClient.put()
                 .uri("/issues/" + issue1.getVisibleId())
@@ -205,6 +243,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void edit_changeStatus() {
         testClient.put()
                 .uri("/issues/" + issue1.getVisibleId())
@@ -223,6 +262,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void edit_changeAssignee() {
         testClient.put()
                 .uri("/issues/" + issue1.getVisibleId())
@@ -241,6 +281,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void edit_validationError() {
         testClient.put()
                 .uri("/issues/" + issue1.getVisibleId())
@@ -252,6 +293,15 @@ public class IssueControllerTest extends AbstractControllerTest {
                     .jsonPath("$.exception").isEqualTo("javax.validation.ConstraintViolationException")
                     .jsonPath("$.timestamp").isNotEmpty()
                     .jsonPath("$.message").isEqualTo("editIssue.diffIssue.id: must be null");
+    }
+
+    @Test
+    public void edit_authError() {
+        testClient.put()
+                .uri("/issues/" + issue1.getVisibleId())
+                .body(Mono.just(Issue.builder().title("New title").description("New description").build()), Issue.class)
+                .exchange()
+                .expectStatus().isUnauthorized();
     }
 
 
