@@ -20,7 +20,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - otus-spring-diploma-psql-db:/var/lib/postgresql/data
+      - ./Keycloak/psql-data/:/var/lib/postgresql/data
 
   keycloak:
     container_name: keycloak
@@ -32,7 +32,7 @@ services:
       DB_VENDOR: postgres
       DB_ADDR: psql-db
     volumes:
-      - Keycloak/keycloak-realm-export.json:/app/keycloak-realm-export.json
+      - ./Keycloak/realm-export.json:/app/keycloak-realm-export.json
     ports:
       - 8180:8080
     depends_on:
@@ -89,6 +89,4 @@ volumes:
   otus-spring-diploma-maven-reps:
     external: true
   otus-spring-diploma-npm-reps:
-    external: true
-  otus-spring-diploma-psql-db:
     external: true
