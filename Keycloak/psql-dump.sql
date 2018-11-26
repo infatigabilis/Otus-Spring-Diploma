@@ -7,17 +7,13 @@ SET default_transaction_read_only = off;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 
---
--- Drop databases (except postgres and template1)
---
-
 
 --
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.1
--- Dumped by pg_dump version 11.1
+-- Dumped from database version 11.0
+-- Dumped by pg_dump version 11.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -94,8 +90,8 @@ GRANT CONNECT ON DATABASE template1 TO PUBLIC;
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.1
--- Dumped by pg_dump version 11.1
+-- Dumped from database version 11.0
+-- Dumped by pg_dump version 11.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -2251,6 +2247,10 @@ caa1f0ec-74d1-4bb6-b9de-b6579e3d1345	b0aef25d-0c33-4750-b3d3-3dfcac0c0c1f
 COPY public.credential (id, device, hash_iterations, salt, type, value, user_id, created_date, counter, digits, period, algorithm) FROM stdin;
 7853dac9-54ab-49d9-a4c3-efbf95d0122b	\N	27500	\\xeb1974a0a2f7417be427980d11b3fcff	password	r3XlwSeYLGUrM/dedy0Jl4kJdKywtYiA8zz+VU5Eq0BtD7pRP0t18r2gWR0H25VqMGQHXNlbKi1FkvnPcNPu1A==	e9a51a6d-3b9a-4812-a244-472b39d09022	\N	0	0	0	pbkdf2-sha256
 fd4aa5f4-e7b1-4f40-9680-9c9c0e74c486	\N	27500	\\x57add1ecc36e79d77586a945aff04036	password	sDjbJjZ/oH+gWQzDGAn4PEvuCal8m46WU0uHOTM4IfvW/AGHP5UDbZNluLUa5LvsYjkMZ3aZ4FOsG+0+9vFJNA==	75213900-e9ee-4a45-b9ab-65b62956c1e1	1543158538611	0	0	0	pbkdf2-sha256
+d9b4c797-dcce-4f2f-8673-5cec327c324d	\N	27500	\\x78fba13383189ab7de561959df8af9a2	password	CpFCtDt7dOcFJYajAA2ik5aQ391S/qKiIQw1zq3Eoc9xxBXOlbO0y+QdR+XuetOMrNuC+FgSSMjtvtbZo436BA==	b42c210e-96bd-4d60-a50a-28557a717c1e	1543219446661	0	0	0	pbkdf2-sha256
+9c68d708-5a72-434f-be23-e9bfd2f58fd2	\N	27500	\\x1dcf7e12e70f95adb1fe5a65632b42f0	password	ijE2aMPIGYeJEfT14AaKw1GXuLT6o4xjMyO58Kq2AllVnmhFLutTdWU3SJrnSZ4DjIRpyZs5TON3da2sK9GGjg==	8c7579b8-b823-4ba7-8f07-ede053b7fd08	1543219504104	0	0	0	pbkdf2-sha256
+82180cbd-d739-4bb0-a141-f75e08eab2ae	\N	27500	\\x4406c459af49397cb54780e15cbe4078	password	ME3olJ5K9JXcmtwqgHw6sdIazPlEwy5rmrt1wEQXm7gFnYmUz68vPnv1EFR0xGvsYrwbC9s9dUBZz4P+e22Ivg==	c26c1f62-dacd-4f6e-bd77-5c1ebee107af	1543219589798	0	0	0	pbkdf2-sha256
+229d8421-b8ad-4efc-a8e3-fa7fb0e81fe9	\N	27500	\\xe400ff67f6fc9588fc6405ac840ef86f	password	Nk7IozzkcGiMnEy6d8wFCFc+Ea3cO2Q9GcX092ZQxaSegaKIa+dRhfOEqWfAHVaZGvq9THqSmSF/aX/o7YGJ2A==	c1b409c9-ce5f-4a94-9c47-c977574a4daf	1543219678519	0	0	0	pbkdf2-sha256
 \.
 
 
@@ -2968,8 +2968,8 @@ e326e39a-9db5-4f3b-aab7-bac98ae74d59	Role	attribute.name
 --
 
 COPY public.realm (id, access_code_lifespan, user_action_lifespan, access_token_lifespan, account_theme, admin_theme, email_theme, enabled, events_enabled, events_expiration, login_theme, name, not_before, password_policy, registration_allowed, remember_me, reset_password_allowed, social, ssl_required, sso_idle_timeout, sso_max_lifespan, update_profile_on_soc_login, verify_email, master_admin_client, login_lifespan, internationalization_enabled, default_locale, reg_email_as_username, admin_events_enabled, admin_events_details_enabled, edit_username_allowed, otp_policy_counter, otp_policy_window, otp_policy_period, otp_policy_digits, otp_policy_alg, otp_policy_type, browser_flow, registration_flow, direct_grant_flow, reset_credentials_flow, client_auth_flow, offline_session_idle_timeout, revoke_refresh_token, access_token_life_implicit, login_with_email_allowed, duplicate_emails_allowed, docker_auth_flow, refresh_token_max_reuse, allow_user_managed_access) FROM stdin;
-master	60	300	60	\N	\N	\N	t	f	0	\N	master	0	\N	f	f	f	f	EXTERNAL	1800	36000	f	f	55e3b562-dfc2-4b59-ab66-f5a5753a8cba	1800	f	\N	f	f	f	f	0	1	30	6	HmacSHA1	totp	23b2d7de-8e92-4056-89bf-b5f4292dd4fb	24e28d54-adf8-46ec-ae7a-c4a75178f5c2	6c066b4f-230a-4fce-ae8c-70401048dc11	6097ddaa-77a3-4d15-85f7-66e3b8081b17	50269b88-ded5-4b2f-a9fc-b808a941b53a	2592000	f	900	t	f	4bd78a75-f049-4484-ad19-42ee38498620	0	f
-Otus-Spring-Diploma	60	300	300	\N	\N	\N	t	f	0	\N	Otus-Spring-Diploma	0	\N	f	f	f	f	EXTERNAL	10800	36000	f	f	02c5fa32-6078-4f18-b244-4acda5694bc9	1800	f	\N	f	f	f	f	0	1	30	6	HmacSHA1	totp	e4995259-45a9-441b-9c05-d035d7d8c298	fd11be0f-1871-4b7c-a726-4c70865ba591	75249688-8348-4deb-8166-21e62c737960	13b26aad-ef33-490e-951f-41d974af671f	4a3ba799-f3d6-4ce2-bd7d-e34af2875da1	2592000	f	900	t	f	55c09654-193b-4235-af19-37f401354988	0	f
+Otus-Spring-Diploma	60	300	300	\N	\N	\N	t	f	0	\N	Otus-Spring-Diploma	0	\N	f	f	f	f	NONE	10800	36000	f	f	02c5fa32-6078-4f18-b244-4acda5694bc9	1800	f	\N	f	f	f	f	0	1	30	6	HmacSHA1	totp	e4995259-45a9-441b-9c05-d035d7d8c298	fd11be0f-1871-4b7c-a726-4c70865ba591	75249688-8348-4deb-8166-21e62c737960	13b26aad-ef33-490e-951f-41d974af671f	4a3ba799-f3d6-4ce2-bd7d-e34af2875da1	2592000	f	900	t	f	55c09654-193b-4235-af19-37f401354988	0	f
+master	60	300	60	\N	\N	\N	t	f	0	\N	master	0	\N	f	f	f	f	NONE	1800	36000	f	f	55e3b562-dfc2-4b59-ab66-f5a5753a8cba	1800	f	\N	f	f	f	f	0	1	30	6	HmacSHA1	totp	23b2d7de-8e92-4056-89bf-b5f4292dd4fb	24e28d54-adf8-46ec-ae7a-c4a75178f5c2	6c066b4f-230a-4fce-ae8c-70401048dc11	6097ddaa-77a3-4d15-85f7-66e3b8081b17	50269b88-ded5-4b2f-a9fc-b808a941b53a	2592000	f	900	t	f	4bd78a75-f049-4484-ad19-42ee38498620	0	f
 \.
 
 
@@ -3017,6 +3017,8 @@ offlineSessionMaxLifespanEnabled	false	Otus-Spring-Diploma
 offlineSessionMaxLifespan	5184000	Otus-Spring-Diploma
 actionTokenGeneratedByAdminLifespan	43200	Otus-Spring-Diploma
 actionTokenGeneratedByUserLifespan	300	Otus-Spring-Diploma
+actionTokenGeneratedByAdminLifespan	43200	master
+actionTokenGeneratedByUserLifespan	300	master
 \.
 
 
@@ -3053,8 +3055,8 @@ COPY public.realm_enabled_event_types (realm_id, value) FROM stdin;
 --
 
 COPY public.realm_events_listeners (realm_id, value) FROM stdin;
-master	jboss-logging
 Otus-Spring-Diploma	jboss-logging
+master	jboss-logging
 \.
 
 
@@ -3227,6 +3229,10 @@ COPY public.scope_policy (scope_id, policy_id) FROM stdin;
 
 COPY public.user_attribute (name, value, user_id, id) FROM stdin;
 domain	programming	75213900-e9ee-4a45-b9ab-65b62956c1e1	4221f977-224f-45ac-8643-205b94d87eae
+domain	business	c26c1f62-dacd-4f6e-bd77-5c1ebee107af	2e06e059-76ca-4264-bfb4-8d9890a4105f
+domain	business	c1b409c9-ce5f-4a94-9c47-c977574a4daf	615ec3ec-8493-4dec-b68c-d4154fc96748
+domain	programming	8c7579b8-b823-4ba7-8f07-ede053b7fd08	bcb3614d-c970-451e-ba0a-04ec796a667a
+domain	programming	b42c210e-96bd-4d60-a50a-28557a717c1e	8c55a510-f58c-43f2-a5d5-e216a4029ce8
 \.
 
 
@@ -3253,6 +3259,10 @@ COPY public.user_consent_client_scope (user_consent_id, scope_id) FROM stdin;
 COPY public.user_entity (id, email, email_constraint, email_verified, enabled, federation_link, first_name, last_name, realm_id, username, created_timestamp, service_account_client_link, not_before) FROM stdin;
 e9a51a6d-3b9a-4812-a244-472b39d09022	\N	c3cb49c4-7082-4f4a-8443-55b263407566	f	t	\N	\N	\N	master	test	1543158242003	\N	0
 75213900-e9ee-4a45-b9ab-65b62956c1e1	user1@mail.com	user1@mail.com	t	t	\N	Scott	Matthews	Otus-Spring-Diploma	user1	1543158518715	\N	0
+b42c210e-96bd-4d60-a50a-28557a717c1e	user2@mail.com	user2@mail.com	t	t	\N	Tilly	Frank	Otus-Spring-Diploma	user2	1543219422591	\N	0
+8c7579b8-b823-4ba7-8f07-ede053b7fd08	user3@mail.com	user3@mail.com	t	t	\N	Arnold	Timms	Otus-Spring-Diploma	user3	1543219491323	\N	0
+c26c1f62-dacd-4f6e-bd77-5c1ebee107af	user4@mail.com	user4@mail.com	t	t	\N	Aiden	Mansell	Otus-Spring-Diploma	user4	1543219566786	\N	0
+c1b409c9-ce5f-4a94-9c47-c977574a4daf	user5@mail.com	user5@mail.com	t	t	\N	Wiktoria	Orozco	Otus-Spring-Diploma	user5	1543219645179	\N	0
 \.
 
 
@@ -3318,6 +3328,26 @@ ca1e27cc-d9fc-4738-b589-777b8b6c85da	75213900-e9ee-4a45-b9ab-65b62956c1e1
 131e2683-c5c9-43ff-92f5-7766a2ebfe3f	75213900-e9ee-4a45-b9ab-65b62956c1e1
 1e5ff209-535b-495d-a8d2-90e21b327070	75213900-e9ee-4a45-b9ab-65b62956c1e1
 2bb2a8ac-36af-4b1f-8117-0ffdbc072ef0	75213900-e9ee-4a45-b9ab-65b62956c1e1
+ca1e27cc-d9fc-4738-b589-777b8b6c85da	b42c210e-96bd-4d60-a50a-28557a717c1e
+131e2683-c5c9-43ff-92f5-7766a2ebfe3f	b42c210e-96bd-4d60-a50a-28557a717c1e
+1e5ff209-535b-495d-a8d2-90e21b327070	b42c210e-96bd-4d60-a50a-28557a717c1e
+2bb2a8ac-36af-4b1f-8117-0ffdbc072ef0	b42c210e-96bd-4d60-a50a-28557a717c1e
+9a6658d6-25db-4c23-bd6e-9975a8ed580f	b42c210e-96bd-4d60-a50a-28557a717c1e
+ca1e27cc-d9fc-4738-b589-777b8b6c85da	8c7579b8-b823-4ba7-8f07-ede053b7fd08
+131e2683-c5c9-43ff-92f5-7766a2ebfe3f	8c7579b8-b823-4ba7-8f07-ede053b7fd08
+1e5ff209-535b-495d-a8d2-90e21b327070	8c7579b8-b823-4ba7-8f07-ede053b7fd08
+2bb2a8ac-36af-4b1f-8117-0ffdbc072ef0	8c7579b8-b823-4ba7-8f07-ede053b7fd08
+9a6658d6-25db-4c23-bd6e-9975a8ed580f	8c7579b8-b823-4ba7-8f07-ede053b7fd08
+ca1e27cc-d9fc-4738-b589-777b8b6c85da	c26c1f62-dacd-4f6e-bd77-5c1ebee107af
+131e2683-c5c9-43ff-92f5-7766a2ebfe3f	c26c1f62-dacd-4f6e-bd77-5c1ebee107af
+1e5ff209-535b-495d-a8d2-90e21b327070	c26c1f62-dacd-4f6e-bd77-5c1ebee107af
+2bb2a8ac-36af-4b1f-8117-0ffdbc072ef0	c26c1f62-dacd-4f6e-bd77-5c1ebee107af
+9a6658d6-25db-4c23-bd6e-9975a8ed580f	c26c1f62-dacd-4f6e-bd77-5c1ebee107af
+ca1e27cc-d9fc-4738-b589-777b8b6c85da	c1b409c9-ce5f-4a94-9c47-c977574a4daf
+131e2683-c5c9-43ff-92f5-7766a2ebfe3f	c1b409c9-ce5f-4a94-9c47-c977574a4daf
+1e5ff209-535b-495d-a8d2-90e21b327070	c1b409c9-ce5f-4a94-9c47-c977574a4daf
+2bb2a8ac-36af-4b1f-8117-0ffdbc072ef0	c1b409c9-ce5f-4a94-9c47-c977574a4daf
+9a6658d6-25db-4c23-bd6e-9975a8ed580f	c1b409c9-ce5f-4a94-9c47-c977574a4daf
 \.
 
 
@@ -5494,8 +5524,8 @@ ALTER TABLE ONLY public.identity_provider_config
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.1
--- Dumped by pg_dump version 11.1
+-- Dumped from database version 11.0
+-- Dumped by pg_dump version 11.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
