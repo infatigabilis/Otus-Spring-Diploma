@@ -8,7 +8,7 @@ spring:
 
 security:
   keycloak:
-    host: http://keycloak:8180
+    host: http://keycloak:8080
 
 eureka:
   client:

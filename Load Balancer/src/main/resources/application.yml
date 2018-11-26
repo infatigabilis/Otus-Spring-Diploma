@@ -23,6 +23,7 @@ management:
 #    TrustStorePassword: secret
 
 eureka:
+  sensitiveHeaders: Cookie,Set-Cookie
   instance:
     prefer-ip-address: true
   client:
