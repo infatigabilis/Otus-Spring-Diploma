@@ -123,7 +123,7 @@ export default class TopBar extends Component {
                 aria-haspopup="true"
                 onClick={() => this.handleMenuToggle("accountMenuOpen")}
               >
-                Scott Matthews | user1@mail.com
+                {this.props.keycloak.tokenParsed.name + ' | ' + this.props.keycloak.tokenParsed.email}
               </Button>
               <Popper open={accountMenuOpen} anchorEl={this.accountMenuAnchor} transition>
                 {({ TransitionProps }) => (
@@ -136,7 +136,7 @@ export default class TopBar extends Component {
                         <MenuList>
                           <MenuItem
                             style={styles.logoutMenuItem}
-                            onClick={event => this.handleMenuClose(event, this.accountMenuAnchor, "accountMenuOpen")}
+                            onClick={event => this.props.keycloak.logout()}
                           >
                             Logout
                           </MenuItem>

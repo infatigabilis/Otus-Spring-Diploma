@@ -77,7 +77,11 @@ export default class EditIssue extends Component {
   };
 
   loadData(issueId) {
-    fetch(`${config.host}/issue-tracker/issues/${issueId}`)
+    fetch(`${config.host}/issue-tracker/issues/${issueId}`, {
+      headers: {
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      }
+    })
       .then(res => res.json())
       .then(res => this.setState({issue: Object.assign({}, res, {id: null})}))
   }
@@ -85,7 +89,10 @@ export default class EditIssue extends Component {
   pushData = () => {
     fetch(`${config.host}/issue-tracker/issues/${this.state.issue.visibleId}`, {
       method: 'PUT',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      },
       body: JSON.stringify(this.state.issue)
     })
       .then(res => {

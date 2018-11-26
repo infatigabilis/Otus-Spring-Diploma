@@ -102,7 +102,11 @@ export default class Issue extends Component {
   };
 
   loadData(issueId) {
-    fetch(`${config.host}/issue-tracker/issues/${issueId}`)
+    fetch(`${config.host}/issue-tracker/issues/${issueId}`, {
+      headers: {
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      }
+    })
       .then(res => res.json())
       .then(res => this.setState({issue: res}))
   }

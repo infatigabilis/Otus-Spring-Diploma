@@ -63,9 +63,15 @@ export default class IssueList extends Component {
 
   loadData() {
     fetch(
-      config.host + '/issue-tracker/issues?assigneeId=1' +
-      (this.state.priorityDirection ? '&priorityDirection=' + this.state.priorityDirection : '') +
-      (this.state.statusDirection ? '&statusDirection=' + this.state.statusDirection : '')
+      config.host + `/issue-tracker/issues?assigneeId=${this.props.keycloak.tokenParsed["preferred_username"]}` +
+      (this.state.priorityDirection ? `&priorityDirection=${this.state.priorityDirection}` : '') +
+      (this.state.statusDirection ? `&statusDirection=${this.state.statusDirection}` : ''),
+
+      {
+        headers: {
+          'Authorization': `Bearer ${this.props.keycloak.token}`
+        }
+      }
     )
       .then(res => res.json())
       .then(res => this.setState({issues: res}))

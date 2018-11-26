@@ -91,7 +91,10 @@ export default class CreateIssue extends Component {
 
     fetch(`${config.host}/issue-tracker/issues`, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      },
       body: JSON.stringify(this.state.issue)
     })
       .then(res => {

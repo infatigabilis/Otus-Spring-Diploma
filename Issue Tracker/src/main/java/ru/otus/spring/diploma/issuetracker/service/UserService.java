@@ -31,10 +31,10 @@ public class UserService {
     public Mono<User> getOne(@NotBlank String id) {
 //        TODO: remove stub
         final var stub = Map.of(
-                "1", new User("1", "Scott Matthews", "user1@mail.com", "programming"),
-                "2", new User("2", "Jake Moore", "user2@mail.com", "programming"),
-                "3", new User("3", "Javon Guzman", "user3@mail.com", "programming"),
-                "4", new User("4", "Robert Burke", "user4@mail.com", "business")
+                "user1", new User("user1", "Scott Matthews", "user1@mail.com", "programming"),
+                "user2", new User("user2", "Jake Moore", "user2@mail.com", "programming"),
+                "user3", new User("user3", "Javon Guzman", "user3@mail.com", "programming"),
+                "user4", new User("user4", "Robert Burke", "user4@mail.com", "business")
         );
 
         final Mono<User> result = stub.containsKey(id) ? Mono.just(stub.get(id)) : Mono.empty();

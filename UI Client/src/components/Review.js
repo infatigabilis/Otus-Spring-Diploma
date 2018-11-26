@@ -88,7 +88,11 @@ export default class Review extends Component {
     if (this.state.priorityDirection) url.searchParams.set('priorityDirection', this.state.priorityDirection);
     if (this.state.statusDirection) url.searchParams.set('statusDirection', this.state.statusDirection);
 
-    fetch(url.toString())
+    fetch(url.toString(), {
+      headers: {
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      }
+    })
       .then(res => res.json())
       .then(res => this.setState({issues: res}))
   }
