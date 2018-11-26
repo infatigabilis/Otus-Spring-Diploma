@@ -22,8 +22,10 @@ management:
 #    TrustStore: classpath:truststore/otus-spring-diploma_issue-tracker.p12
 #    TrustStorePassword: secret
 
-eureka:
+zuul:
   sensitiveHeaders: Cookie,Set-Cookie
+
+eureka:
   instance:
     prefer-ip-address: true
   client:
