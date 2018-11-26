@@ -20,7 +20,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./Keycloak/psql-data/:/var/lib/postgresql/data
+      - ./Keycloak/psql-dump.sql:/docker-entrypoint-initdb.d/psql-dump.sql
 
   keycloak:
     container_name: keycloak
