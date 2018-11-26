@@ -31,37 +31,37 @@ public class DbChangelog {
         final var collection = jongo.getCollection("issueDpo");
 
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "1")
+                new IssueDpo(null, "OTUS-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-2", "DAO на Spring JDBC", DESC2, DEVELOPMENT.ordinal(), HIGH.ordinal(), "1")
+                new IssueDpo(null, "OTUS-2", "DAO на Spring JDBC", DESC2, DEVELOPMENT.ordinal(), HIGH.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-3", "JPQL, Spring ORM, DAO на основе Spring ORM + JPA", DESC3, DEVELOPMENT.ordinal(), MEDIUM.ordinal(), "1")
+                new IssueDpo(null, "OTUS-3", "JPQL, Spring ORM, DAO на основе Spring ORM + JPA", DESC3, DEVELOPMENT.ordinal(), MEDIUM.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-4", "Транзакции, Spring Tx", DESC4, TESTING.ordinal(), MEDIUM.ordinal(), "2")
+                new IssueDpo(null, "OTUS-4", "Транзакции, Spring Tx", DESC4, TESTING.ordinal(), MEDIUM.ordinal(), "user2")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-5", "SQL и NoSQL базы данных", DESC5, NEW.ordinal(), LOW.ordinal(), "3")
+                new IssueDpo(null, "OTUS-5", "SQL и NoSQL базы данных", DESC5, NEW.ordinal(), LOW.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-6", "Reactive Stack", DESC6, NEW.ordinal(), MEDIUM.ordinal(), "1")
+                new IssueDpo(null, "OTUS-6", "Reactive Stack", DESC6, NEW.ordinal(), MEDIUM.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-7", "Spring WebFlux", DESC7, ANALYSIS.ordinal(), MEDIUM.ordinal(), "3")
+                new IssueDpo(null, "OTUS-7", "Spring WebFlux", DESC7, ANALYSIS.ordinal(), MEDIUM.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-8", "Spring Integration: Монолиты vs. Microservices Round 1, Messaging, Enterprise Integration Patterns (EIP)", DESC8, DONE.ordinal(), HIGH.ordinal(), "3")
+                new IssueDpo(null, "OTUS-8", "Spring Integration: Монолиты vs. Microservices Round 1, Messaging, Enterprise Integration Patterns (EIP)", DESC8, DONE.ordinal(), HIGH.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-9", "Spring Integration: Endpoints и Flow Components", DESC9, DONE.ordinal(), MEDIUM.ordinal(), "3")
+                new IssueDpo(null, "OTUS-9", "Spring Integration: Endpoints и Flow Components", DESC9, DONE.ordinal(), MEDIUM.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-10", "Docker, оркестрация, облака, облачные хостинги", DESC10, CLOSED.ordinal(), LOW.ordinal(), "3")
+                new IssueDpo(null, "OTUS-10", "Docker, оркестрация, облака, облачные хостинги", DESC10, CLOSED.ordinal(), LOW.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-11", "Spring Cloud Data Flow, Hystrix Circuit Breaker", DESC11, VERIFIED.ordinal(), HIGH.ordinal(), "2")
+                new IssueDpo(null, "OTUS-11", "Spring Cloud Data Flow, Hystrix Circuit Breaker", DESC11, VERIFIED.ordinal(), HIGH.ordinal(), "user2")
         ));
     }
 

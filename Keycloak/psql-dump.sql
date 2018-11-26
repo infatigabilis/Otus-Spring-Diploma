@@ -3095,9 +3095,9 @@ ee8227e9-e506-4a4b-a074-2ada05003136	/auth/realms/master/account/*
 bbc2d41f-3582-452a-a94c-16a1819a1cdb	/auth/admin/master/console/*
 09c74bad-b814-4850-987a-a4abf16743f3	/auth/admin/Otus-Spring-Diploma/console/*
 b5a9dec5-70dd-4a5b-9664-e79093420f4a	/auth/realms/Otus-Spring-Diploma/account/*
-f215e460-e572-42ec-8b6b-f1c6ad3d188b	http://localhost:8080/*
-f215e460-e572-42ec-8b6b-f1c6ad3d188b	http://46.101.139.235
 f215e460-e572-42ec-8b6b-f1c6ad3d188b	http://localhost:3000/*
+f215e460-e572-42ec-8b6b-f1c6ad3d188b	http://localhost/*
+f215e460-e572-42ec-8b6b-f1c6ad3d188b	http://46.101.139.235/*
 \.
 
 
@@ -3380,6 +3380,7 @@ COPY public.username_login_failure (realm_id, username, failed_login_not_before,
 --
 
 COPY public.web_origins (client_id, value) FROM stdin;
+f215e460-e572-42ec-8b6b-f1c6ad3d188b	*
 \.
 
 
