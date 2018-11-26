@@ -55,7 +55,7 @@ export default class App extends Component {
 
           {this.state.authenticated ? (
             <React.Fragment>
-              <Route component={() => <TopBar keycloak={this.state.keycloak} />} />
+              <Route component={(props) => <TopBar {...props} keycloak={this.state.keycloak} />} />
 
               <Grid container spacing={24} style={styles.root}>
                 <Grid item xs={5} style={styles.grid}>
