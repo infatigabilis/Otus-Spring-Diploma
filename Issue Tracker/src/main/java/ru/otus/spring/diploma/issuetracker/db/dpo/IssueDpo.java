@@ -25,6 +25,8 @@ public class IssueDpo {
     private Integer priorityOrdinal;
     private String assigneeId;
 
+    private String domain;
+
 
     public static IssueDpo fromDomain(Issue domain) {
         final var dpo = new IssueDpo();

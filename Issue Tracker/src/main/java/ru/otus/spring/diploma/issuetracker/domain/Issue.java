@@ -1,5 +1,6 @@
 package ru.otus.spring.diploma.issuetracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,6 +39,17 @@ public class Issue {
 
     @NotNull(groups = {Default.class, Create.class})
     private User assignee;
+
+
+    @JsonIgnore
+    @NotNull(groups = {Default.class})
+    private String domain;
+
+
+    public Issue withDomain(String domain) {
+        this.domain = domain;
+        return this;
+    }
 
 
     @AllArgsConstructor

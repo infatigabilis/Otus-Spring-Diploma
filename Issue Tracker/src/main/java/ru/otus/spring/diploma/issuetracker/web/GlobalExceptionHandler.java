@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ServerWebInputException;
 import ru.otus.spring.diploma.issuetracker.exception.BusinessRuleViolationException;
+import ru.otus.spring.diploma.issuetracker.exception.EntityNotFoundException;
 import ru.otus.spring.diploma.issuetracker.exception.ExternalServiceUnavailableException;
 
 import javax.validation.ConstraintViolationException;
@@ -21,6 +22,7 @@ import java.util.Date;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,6 +53,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(code = INTERNAL_SERVER_ERROR)
     public ExceptionEntity externalServiceUnavailableException(ExternalServiceUnavailableException e) {
         return ExceptionEntity.builder().status(500).exception(e).message("Some external service is unavailable. Please contact our support").build();
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    @ResponseStatus(code = NOT_FOUND)
+    public ExceptionEntity entityNotFoundException(EntityNotFoundException e) {
+        return ExceptionEntity.builder().status(400).exception(e).message("Entity not found").build();
     }
 
     @ExceptionHandler(HystrixRuntimeException.class)

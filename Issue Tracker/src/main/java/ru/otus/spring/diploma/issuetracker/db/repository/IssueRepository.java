@@ -7,6 +7,6 @@ import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.dpo.IssueDpo;
 
 public interface IssueRepository extends ReactiveMongoRepository<IssueDpo, String> {
-    Mono<IssueDpo> findByVisibleId(String visibleId);
-    Flux<IssueDpo> findByAssigneeId(String assigneeId, Sort sort);
+    Mono<IssueDpo> findByVisibleIdAndDomain(String visibleId, String domain);
+    Flux<IssueDpo> findAllByDomain(String domain);
 }

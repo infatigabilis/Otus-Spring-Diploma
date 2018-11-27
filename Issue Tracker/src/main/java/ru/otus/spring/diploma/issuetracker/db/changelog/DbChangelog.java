@@ -33,85 +33,85 @@ public class DbChangelog {
         final var collection = jongo.getCollection("issueDpo");
 
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user1", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-2", "DAO на Spring JDBC", DESC2, DEVELOPMENT.ordinal(), HIGH.ordinal(), "user2")
+                new IssueDpo(null, "SPRING-2", "DAO на Spring JDBC", DESC2, DEVELOPMENT.ordinal(), HIGH.ordinal(), "user2", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-3", "JPQL, Spring ORM, DAO на основе Spring ORM + JPA", DESC3, DEVELOPMENT.ordinal(), MEDIUM.ordinal(), "user2")
+                new IssueDpo(null, "SPRING-3", "JPQL, Spring ORM, DAO на основе Spring ORM + JPA", DESC3, DEVELOPMENT.ordinal(), MEDIUM.ordinal(), "user2", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-4", "Транзакции, Spring Tx", DESC4, TESTING.ordinal(), VERY_LOW.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-4", "Транзакции, Spring Tx", DESC4, TESTING.ordinal(), VERY_LOW.ordinal(), "user1", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-5", "SQL и NoSQL базы данных", DESC5, NEW.ordinal(), LOW.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-5", "SQL и NoSQL базы данных", DESC5, NEW.ordinal(), LOW.ordinal(), "user3", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-6", "Reactive Stack", DESC6, NEW.ordinal(), MEDIUM.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-6", "Reactive Stack", DESC6, NEW.ordinal(), MEDIUM.ordinal(), "user1", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-7", "Spring WebFlux", DESC7, ANALYSIS.ordinal(), MEDIUM.ordinal(), "user2")
+                new IssueDpo(null, "SPRING-7", "Spring WebFlux", DESC7, ANALYSIS.ordinal(), MEDIUM.ordinal(), "user2", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-8", "Spring Integration: Монолиты vs. Microservices Round 1", DESC8, DONE.ordinal(), HIGH.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-8", "Spring Integration: Монолиты vs. Microservices Round 1", DESC8, DONE.ordinal(), HIGH.ordinal(), "user3", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-9", "Spring Integration: Endpoints и Flow Components", DESC9, DONE.ordinal(), MEDIUM.ordinal(), "user2")
+                new IssueDpo(null, "SPRING-9", "Spring Integration: Endpoints и Flow Components", DESC9, DONE.ordinal(), MEDIUM.ordinal(), "user2", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-10", "Docker, оркестрация, облака, облачные хостинги", DESC10, CLOSED.ordinal(), LOW.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-10", "Docker, оркестрация, облака, облачные хостинги", DESC10, CLOSED.ordinal(), LOW.ordinal(), "user1", "programming")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "SPRING-11", "Spring Cloud Data Flow, Hystrix Circuit Breaker", DESC11, VERIFIED.ordinal(), HIGH.ordinal(), "user1")
-        ));
-
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-1", "Байт код", DESC12, VERIFIED.ordinal(), MEDIUM.ordinal(), "user1")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-2", "Углубленные основы", DESC13, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user2")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-3", "Remote debug", DESC14, FEEDBACK.ordinal(), HIGH.ordinal(), "user3")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-4", "Контейнеры и алгоритмы", DESC15, TESTING.ordinal(), VERY_HIGH.ordinal(), "user3")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-5", "Инструменты для преобразования контейнеров", DESC16, TESTING.ordinal(), LOW.ordinal(), "user2")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-6", "Сборщик мусора", DESC17, NEW.ordinal(), LOW.ordinal(), "user1")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-7", "QA и тестирование", DESC18, DONE.ordinal(), MEDIUM.ordinal(), "user2")
-        ));
-        collection.insert(toSpringDocument(
-                new IssueDpo(null, "JAVASE-8", "Аннотации", DESC19, DONE.ordinal(), HIGH.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-11", "Spring Cloud Data Flow, Hystrix Circuit Breaker", DESC11, VERIFIED.ordinal(), HIGH.ordinal(), "user1", "programming")
         ));
 
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-1", "Байт код", DESC12, VERIFIED.ordinal(), MEDIUM.ordinal(), "user1", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-2", "Углубленные основы", DESC13, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user2", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-3", "Remote debug", DESC14, FEEDBACK.ordinal(), HIGH.ordinal(), "user3", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-4", "Контейнеры и алгоритмы", DESC15, TESTING.ordinal(), VERY_HIGH.ordinal(), "user3", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-5", "Инструменты для преобразования контейнеров", DESC16, TESTING.ordinal(), LOW.ordinal(), "user2", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-6", "Сборщик мусора", DESC17, NEW.ordinal(), LOW.ordinal(), "user1", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-7", "QA и тестирование", DESC18, DONE.ordinal(), MEDIUM.ordinal(), "user2", "programming")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-8", "Аннотации", DESC19, DONE.ordinal(), HIGH.ordinal(), "user1", "programming")
+        ));
+
 
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-1", "Роль и цели", DESC20, ANALYSIS.ordinal(), VERY_HIGH.ordinal(), "user4")
+                new IssueDpo(null, "PM-1", "Роль и цели", DESC20, ANALYSIS.ordinal(), VERY_HIGH.ordinal(), "user4", "business")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-2", "Качества и навыки", DESC21, CLOSED.ordinal(), VERY_LOW.ordinal(), "user5")
+                new IssueDpo(null, "PM-2", "Качества и навыки", DESC21, CLOSED.ordinal(), VERY_LOW.ordinal(), "user5", "business")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-3", "Культура исполнения: про то как успевать больше", DESC22, CLOSED.ordinal(), MEDIUM.ordinal(), "user4")
+                new IssueDpo(null, "PM-3", "Культура исполнения: про то как успевать больше", DESC22, CLOSED.ordinal(), MEDIUM.ordinal(), "user4", "business")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-4", "Культура выполнения: как не налажать в мелочах", DESC23, VERIFIED.ordinal(), LOW.ordinal(), "user4")
+                new IssueDpo(null, "PM-4", "Культура выполнения: как не налажать в мелочах", DESC23, VERIFIED.ordinal(), LOW.ordinal(), "user4", "business")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-5", "Командообразование", DESC24, NEW.ordinal(), MEDIUM.ordinal(), "user5")
+                new IssueDpo(null, "PM-5", "Командообразование", DESC24, NEW.ordinal(), MEDIUM.ordinal(), "user5", "business")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-6", "Культура поведения и атмосфера", DESC25, VERIFIED.ordinal(), MEDIUM.ordinal(), "user5")
+                new IssueDpo(null, "PM-6", "Культура поведения и атмосфера", DESC25, VERIFIED.ordinal(), MEDIUM.ordinal(), "user5", "business")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "PM-7", "Коммуникации", DESC26, DONE.ordinal(), VERY_HIGH.ordinal(), "user4")
+                new IssueDpo(null, "PM-7", "Коммуникации", DESC26, DONE.ordinal(), VERY_HIGH.ordinal(), "user4", "business")
         ));
     }
 

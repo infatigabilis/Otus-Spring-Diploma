@@ -6,3 +6,10 @@ security:
     host: http://localhost:8180
     realm: Otus-Spring-Diploma
     client: otus-spring-diploma-client
+    admin:
+      username: test
+      password: secret
+
+eureka:
+  client:
+    enabled: false
