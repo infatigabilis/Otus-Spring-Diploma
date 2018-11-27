@@ -42,7 +42,6 @@ export default class TopBar extends Component {
   };
 
   render() {
-    const { issuesMenuOpen } = this.state;
     const { accountMenuOpen } = this.state;
 
     return (
