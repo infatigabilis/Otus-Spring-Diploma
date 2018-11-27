@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .securityContextRepository(contextRepository)
 
                 .authorizeExchange()
-                .pathMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
+                .pathMatchers("/swagger-ui.html", "/v2/api-docs", "/actuator/**").permitAll()
                 .and()
 
                 .authorizeExchange()
