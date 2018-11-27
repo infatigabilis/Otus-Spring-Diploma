@@ -20,7 +20,6 @@ import java.util.List;
 public class IssueController {
     private final IssueService issueService;
 
-
     public IssueController(IssueService issueService) {
         this.issueService = issueService;
     }

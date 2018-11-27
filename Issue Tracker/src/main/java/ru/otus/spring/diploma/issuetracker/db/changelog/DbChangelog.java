@@ -12,6 +12,8 @@ import java.util.Map;
 import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.HIGH;
 import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.LOW;
 import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.MEDIUM;
+import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.VERY_HIGH;
+import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.VERY_LOW;
 import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.ANALYSIS;
 import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.CLOSED;
 import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.DEVELOPMENT;
@@ -31,37 +33,85 @@ public class DbChangelog {
         final var collection = jongo.getCollection("issueDpo");
 
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-1", "AOP, Spring AOP", DESC1, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-2", "DAO на Spring JDBC", DESC2, DEVELOPMENT.ordinal(), HIGH.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-2", "DAO на Spring JDBC", DESC2, DEVELOPMENT.ordinal(), HIGH.ordinal(), "user2")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-3", "JPQL, Spring ORM, DAO на основе Spring ORM + JPA", DESC3, DEVELOPMENT.ordinal(), MEDIUM.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-3", "JPQL, Spring ORM, DAO на основе Spring ORM + JPA", DESC3, DEVELOPMENT.ordinal(), MEDIUM.ordinal(), "user2")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-4", "Транзакции, Spring Tx", DESC4, TESTING.ordinal(), MEDIUM.ordinal(), "user2")
+                new IssueDpo(null, "SPRING-4", "Транзакции, Spring Tx", DESC4, TESTING.ordinal(), VERY_LOW.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-5", "SQL и NoSQL базы данных", DESC5, NEW.ordinal(), LOW.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-5", "SQL и NoSQL базы данных", DESC5, NEW.ordinal(), LOW.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-6", "Reactive Stack", DESC6, NEW.ordinal(), MEDIUM.ordinal(), "user1")
+                new IssueDpo(null, "SPRING-6", "Reactive Stack", DESC6, NEW.ordinal(), MEDIUM.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-7", "Spring WebFlux", DESC7, ANALYSIS.ordinal(), MEDIUM.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-7", "Spring WebFlux", DESC7, ANALYSIS.ordinal(), MEDIUM.ordinal(), "user2")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-8", "Spring Integration: Монолиты vs. Microservices Round 1, Messaging, Enterprise Integration Patterns (EIP)", DESC8, DONE.ordinal(), HIGH.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-8", "Spring Integration: Монолиты vs. Microservices Round 1", DESC8, DONE.ordinal(), HIGH.ordinal(), "user3")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-9", "Spring Integration: Endpoints и Flow Components", DESC9, DONE.ordinal(), MEDIUM.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-9", "Spring Integration: Endpoints и Flow Components", DESC9, DONE.ordinal(), MEDIUM.ordinal(), "user2")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-10", "Docker, оркестрация, облака, облачные хостинги", DESC10, CLOSED.ordinal(), LOW.ordinal(), "user3")
+                new IssueDpo(null, "SPRING-10", "Docker, оркестрация, облака, облачные хостинги", DESC10, CLOSED.ordinal(), LOW.ordinal(), "user1")
         ));
         collection.insert(toSpringDocument(
-                new IssueDpo(null, "OTUS-11", "Spring Cloud Data Flow, Hystrix Circuit Breaker", DESC11, VERIFIED.ordinal(), HIGH.ordinal(), "user2")
+                new IssueDpo(null, "SPRING-11", "Spring Cloud Data Flow, Hystrix Circuit Breaker", DESC11, VERIFIED.ordinal(), HIGH.ordinal(), "user1")
+        ));
+
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-1", "Байт код", DESC12, VERIFIED.ordinal(), MEDIUM.ordinal(), "user1")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-2", "Углубленные основы", DESC13, FEEDBACK.ordinal(), MEDIUM.ordinal(), "user2")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-3", "Remote debug", DESC14, FEEDBACK.ordinal(), HIGH.ordinal(), "user3")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-4", "Контейнеры и алгоритмы", DESC15, TESTING.ordinal(), VERY_HIGH.ordinal(), "user3")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-5", "Инструменты для преобразования контейнеров", DESC16, TESTING.ordinal(), LOW.ordinal(), "user2")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-6", "Сборщик мусора", DESC17, NEW.ordinal(), LOW.ordinal(), "user1")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-7", "QA и тестирование", DESC18, DONE.ordinal(), MEDIUM.ordinal(), "user2")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "JAVASE-8", "Аннотации", DESC19, DONE.ordinal(), HIGH.ordinal(), "user1")
+        ));
+
+
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-1", "Роль и цели", DESC20, ANALYSIS.ordinal(), VERY_HIGH.ordinal(), "user4")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-2", "Качества и навыки", DESC21, CLOSED.ordinal(), VERY_LOW.ordinal(), "user5")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-3", "Культура исполнения: про то как успевать больше", DESC22, CLOSED.ordinal(), MEDIUM.ordinal(), "user4")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-4", "Культура выполнения: как не налажать в мелочах", DESC23, VERIFIED.ordinal(), LOW.ordinal(), "user4")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-5", "Командообразование", DESC24, NEW.ordinal(), MEDIUM.ordinal(), "user5")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-6", "Культура поведения и атмосфера", DESC25, VERIFIED.ordinal(), MEDIUM.ordinal(), "user5")
+        ));
+        collection.insert(toSpringDocument(
+                new IssueDpo(null, "PM-7", "Коммуникации", DESC26, DONE.ordinal(), VERY_HIGH.ordinal(), "user4")
         ));
     }
 
@@ -86,4 +136,21 @@ public class DbChangelog {
     private static final String DESC9 = "Слушатели также узнают про другие Endpoints и Flow Components и смогут разрабатывать сложные Enterprise-приложения c почти любой интеграцией.";
     private static final String DESC10 = "По окончании данного занятия слушатели смогут разбираться в вышеперечисленных словах, а также разбираться в современных принципах построения облачных систем.";
     private static final String DESC11 = "Слушатели смогут узнать как строятся огромные системы на Spring с использованием Spring Cloud Data Flow.\n\nТакже будет рассмотрен популярный фреймворк для использования внешних систем и ресурсов - Hystrix (+Hystrix Javanica) и его интеграция со Spring.";
+
+    private static final String DESC12 = "Байт код. Содержание .class. Декомпиляция. Обфускация. История изменений языка Java от версии к версии. Разбор ДЗ.";
+    private static final String DESC13 = "Углубленные основы. Загрузка классов. Виды и задачи class loader-ов. Класс Class&lt;?&gt;. Примитивные типы, строки, массивы. Память, которую занимают объекты.";
+    private static final String DESC14 = "Hot swap. Remote debug. Сборщик мусора. Instrumentation. Разбор примеров и ДЗ.";
+    private static final String DESC15 = "Generics. Контейнеры и алгоритмы. Обзор устройства и работы контейнеров из java.util. Сравнение контейнеров. Карты на основе хэш функции и на основе дерева. Разбор алгоритмов из java.util.Collections.";
+    private static final String DESC16 = "Инструменты для преобразования контейнеров. Apache Commons. Google Guava. Разбор примеров и ДЗ.";
+    private static final String DESC17 = "Параметры запуска VM. Сборщик мусора. Виды сборок. Разделение памяти под разные поколения объектов. Виды сборщиков. JMX. Управление приложением из jconsole. OutOfMemory. dump памяти. Исседование thread dump и heap dump.";
+    private static final String DESC18 = "QA, тестирование. Виды тестов. \"Заглушки\". Testing frameworks: junit, mockito. Разбор примеров и ДЗ.";
+    private static final String DESC19 = "Аннотации. Стандартные аннотации. Применение аннотаций. Типы аннотаций. Синтаксис. Создание своих аннтатаций. Reflection.";
+
+    private static final String DESC20 = "В каких ролях выступает руководитель (их, кстати, немало); какие функции выполняет в каждой из ролей; какие цели стоят перед руководителем; кто ставит эти цели.";
+    private static final String DESC21 = "Какими качествами должен обладать руководитель для успешной работы; какие навыки должен в себе развивать.";
+    private static final String DESC22 = "Почему так важно выполнять намеченное; что этому мешает; в какую сторону и как \"прокачиваться";
+    private static final String DESC23 = "Почему так важно не упускать детали; как этого избегать; как помогать в этом окружающим.";
+    private static final String DESC24 = "Что делает команду командой; как организовать коллектив в команду.";
+    private static final String DESC25 = "Что представляет из себя культура поведения в команде; как ее формировать и надо ли; от чего зависит атмосфера в команде и какой она должна быть.";
+    private static final String DESC26 = "Как отстраивать процессы обмена информацией; за какими коммуникационными потоками надо следить отдельно; чем отличается хорошо налаженное взаимодействие";
 }
