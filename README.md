@@ -17,7 +17,7 @@
  - деплой в docker-compose одной командой.
  - Signle Sing-On (Keycloak).
  - бекенд - Json REST API, фронтенд - SPA.
- - поддержка роутинга в SPA, открые странице тикета по ссылке.
+ - поддержка роутинга в SPA, в частности открытие страницы тикета по ссылке.
  
 #### Стек:
  - бекенд: Spring WebFlux, Spring Data Reactive MongoDB, Spring Reactive Security, Spring Cache, Hystrix, Keycloak, Zuul,
