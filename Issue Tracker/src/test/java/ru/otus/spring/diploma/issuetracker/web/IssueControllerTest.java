@@ -59,9 +59,9 @@ public class IssueControllerTest extends AbstractControllerTest {
 
     @Before
     public void setUp() {
-        given(userService.getOne("1")).willReturn(Mono.just(user1));
-        given(userService.getOne("2")).willReturn(Mono.just(user2));
-        given(userService.getOne("3")).willReturn(Mono.just(user3));
+        given(userService.getOneIgnoringDomain("1")).willReturn(Mono.just(user1));
+        given(userService.getOneIgnoringDomain("2")).willReturn(Mono.just(user2));
+        given(userService.getOneIgnoringDomain("3")).willReturn(Mono.just(user3));
 
         issueRepository.deleteAll().block();
 

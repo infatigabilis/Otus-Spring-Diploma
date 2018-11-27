@@ -57,17 +57,17 @@ public class UserService {
 
 
     @Cacheable("users")
-    public Mono<User> getOne(@NotBlank String id) {
+    public Mono<User> getOneIgnoringDomain(@NotBlank String id) {
         val result = getKeycloakAdminAccessToken().flatMap(adminToken ->
                 getKeycloakUsers(adminToken, id).map(keycloakUsers ->
                         keycloakUsers.stream().map(KeycloakUser::toDomain).collect(toList()).get(0)
                 )
         );
 
-        return HystrixCommands.from(result).commandName("IssueService.getOne")
+        return HystrixCommands.from(result).commandName("IssueService.getOneIgnoringDomain")
                 .fallback(cause -> {
                     return Mono.fromCallable(() -> {
-                        commonUtils.logFallback(logger, "getOne", List.of(id), cause);
+                        commonUtils.logFallback(logger, "getOneIgnoringDomain", List.of(id), cause);
                         return FALLBACK_USER;
                     });
                 })
@@ -76,10 +76,13 @@ public class UserService {
     }
 
     @Cacheable("users")
-    public Mono<List<User>> getAll() {
+    public Mono<List<User>> getAll(String domain) {
         val result = getKeycloakAdminAccessToken().flatMap(adminToken ->
             getKeycloakUsers(adminToken, null).map(keycloakUsers ->
-                    keycloakUsers.stream().map(KeycloakUser::toDomain).collect(toList())
+                    keycloakUsers.stream()
+                            .map(KeycloakUser::toDomain)
+                            .filter(user -> user.getDomain().equals(domain))
+                            .collect(toList())
             )
         );
 

@@ -3,6 +3,7 @@ package ru.otus.spring.diploma.issuetracker.utils;
 import com.netflix.hystrix.exception.HystrixBadRequestException;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.slf4j.Logger;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -45,5 +46,9 @@ public class CommonUtils {
                 throw new HystrixBadRequestException("Ignored exception", cause);
             }
         }
+    }
+
+    public String extractDomain(Authentication auth) {
+        return auth.getAuthorities().iterator().next().getAuthority();
     }
 }

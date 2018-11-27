@@ -16,7 +16,6 @@ import ru.otus.spring.diploma.issuetracker.db.dpo.IssueDpo;
 import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.User;
-import ru.otus.spring.diploma.issuetracker.exception.EntityNotFoundException;
 import ru.otus.spring.diploma.issuetracker.exception.ExternalServiceUnavailableException;
 import ru.otus.spring.diploma.issuetracker.utils.CommonUtils;
 import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Create;
@@ -25,7 +24,6 @@ import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Edit;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -54,7 +52,7 @@ public class IssueService {
 
 
     public Mono<Issue> getByVisibleId(@NotBlank String issueVisibleId, Authentication auth) {
-        val result = issueRepository.findByVisibleIdAndDomain(issueVisibleId, extractDomain(auth)).flatMap(this::dpoToDomain);
+        val result = issueRepository.findByVisibleIdAndDomain(issueVisibleId, commonUtils.extractDomain(auth)).flatMap(this::dpoToDomain);
 
         return HystrixCommands.from(result).commandName("IssueService.getByVisibleId")
                 .fallback(cause -> {
@@ -68,7 +66,7 @@ public class IssueService {
 
     public Mono<List<Issue>> getMany(@NotNull Issue example, @NotNull Sort sort, Authentication auth) {
         val exampleTerm = Example.of(
-                IssueDpo.fromDomain(example.withDomain(extractDomain(auth))),
+                IssueDpo.fromDomain(example.withDomain(commonUtils.extractDomain(auth))),
                 ExampleMatcher.matching().withIgnoreNullValues()
         );
 
@@ -98,7 +96,7 @@ public class IssueService {
 
     @Validated(Create.class)
     public Mono<Void> createIssue(@Valid Issue issue, Authentication auth) {
-        val result = issueRepository.save(IssueDpo.fromDomain(issue.withDomain(extractDomain(auth)))).then();
+        val result = issueRepository.save(IssueDpo.fromDomain(issue.withDomain(commonUtils.extractDomain(auth)))).then();
 
         return HystrixCommands.from(result).commandName("IssueService.createIssue")
                 .fallback(cause -> {
@@ -113,7 +111,7 @@ public class IssueService {
 
     @Validated(Edit.class)
     public Mono<Void> editIssue(@NotBlank String originalIssueVisibleId, @Valid Issue diffIssue, Authentication auth) {
-        val result = issueRepository.findByVisibleIdAndDomain(originalIssueVisibleId, extractDomain(auth)).flatMap(issue -> {
+        val result = issueRepository.findByVisibleIdAndDomain(originalIssueVisibleId, commonUtils.extractDomain(auth)).flatMap(issue -> {
             commonUtils.mergeObjects(issue, IssueDpo.fromDomain(diffIssue), IssueDpo.class);
             commonUtils.validate(issue);
             return issueRepository.save(issue).then();
@@ -131,15 +129,11 @@ public class IssueService {
 
 
     private Mono<Issue> dpoToDomain(IssueDpo dpo) {
-        return userService.getOne(dpo.getAssigneeId())
+        return userService.getOneIgnoringDomain(dpo.getAssigneeId())
                 .switchIfEmpty(Mono.defer(() -> {
                     logger.error("User not found by id '{}' for issue '{}'", dpo.getAssigneeId(), dpo.getId());
                     return Mono.just(new User(dpo.getAssigneeId(), "Deleted user", null, null));
                 }))
                 .map(dpo::toDomain);
-    }
-
-    private String extractDomain(Authentication auth) {
-        return auth.getAuthorities().iterator().next().getAuthority();
     }
 }
