@@ -58,60 +58,11 @@ export default class TopBar extends Component {
 
             <Grid item xs={7}>
               <div>
-
-                <Button disabled>Projects</Button>
-
+                <Button onClick={() => this.props.history.push('/dashboard')}>Dashboard</Button>
                 <Typography style={{display: 'inline'}}>|</Typography>
-
-                <Button
-                  buttonRef={node => { this.issuesMenuAnchor = node }}
-                  aria-owns={issuesMenuOpen ? 'issues-menu' : undefined}
-                  aria-haspopup="true"
-                  onClick={() => this.handleMenuToggle("issuesMenuOpen")}
-                >
-                  Issues
-                </Button>
-                <Popper open={issuesMenuOpen} anchorEl={this.issuesMenuAnchor} transition>
-                  {({ TransitionProps }) => (
-                    <Grow id="issues-menu"
-                          {...TransitionProps}
-                          style={{ transformOrigin: 'left bottom' }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={event => this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")}>
-                          <MenuList>
-                            <MenuItem onClick={event => {
-                              this.props.history.push('/');
-                              this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")
-                            }}>
-                              Dashboard
-                            </MenuItem>
-                            <MenuItem onClick={event => {
-                              this.props.history.push('/review');
-                              this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")
-                            }}>
-                              Review
-                            </MenuItem>
-                            <MenuItem
-                              style={styles.createIssueMenuItem}
-                              onClick={event => {
-                                this.props.history.push('/create');
-                                this.handleMenuClose(event, this.issuesMenuAnchor, "issuesMenuOpen")
-                              }}
-                            >
-                              Create new
-                            </MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-
+                <Button onClick={() => this.props.history.push('/review')}>Review all</Button>
                 <Typography style={{display: 'inline'}}>|</Typography>
-
-                <Button disabled>Agile</Button>
-
+                <Button style={styles.createIssueMenuItem} onClick={() => this.props.history.push('/create')}>Create new issue</Button>
               </div>
             </Grid>
 
@@ -136,7 +87,7 @@ export default class TopBar extends Component {
                         <MenuList>
                           <MenuItem
                             style={styles.logoutMenuItem}
-                            onClick={event => this.props.keycloak.logout()}
+                            onClick={() => this.props.keycloak.logout()}
                           >
                             Logout
                           </MenuItem>
