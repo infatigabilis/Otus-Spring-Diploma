@@ -62,11 +62,15 @@ const allLabels = [
 export default class EditIssue extends Component {
   state = {
     hasRequestError: false,
+    initStatus: '',
     issue: {
       visibleId: '',
       title: '',
       description: '',
-      status: '',
+      status: {
+        next: [],
+        previous: []
+      },
       priority: '',
       assignee: {
         id: ''
@@ -83,7 +87,7 @@ export default class EditIssue extends Component {
       }
     })
       .then(res => res.json())
-      .then(res => this.setState({issue: Object.assign({}, res, {id: null})}))
+      .then(res => this.setState({issue: Object.assign({}, res, {id: null}), initStatus: res.status.current}))
   }
 
   pushData = () => {
@@ -117,6 +121,11 @@ export default class EditIssue extends Component {
     if (event.target.name === 'assignee-id') {
       this.setState(state => {
         state.issue.assignee.id = value;
+        return state;
+      });
+    } else if(event.target.name === 'status-current') {
+      this.setState(state => {
+        state.issue.status.current = value;
         return state;
       });
     } else {
@@ -219,19 +228,19 @@ export default class EditIssue extends Component {
             <FormControl style={styles.select}>
               <InputLabel>Status</InputLabel>
               <Select
-                value={this.state.issue.status}
+                value={this.state.issue.status.current}
                 onChange={this.handleSelectChange}
-                inputProps={{name: 'status'}}
+                inputProps={{name: 'status-current'}}
               >
-                <MenuItem value={'NEW'}>New</MenuItem>
-                <MenuItem value={'ANALISYS'}>Analisys</MenuItem>
-                <MenuItem value={'DEVELOPMENT'}>Development</MenuItem>
-                <MenuItem value={'REVIEW'}>Review</MenuItem>
-                <MenuItem value={'DEPLOYMENT'}>Deployment</MenuItem>
-                <MenuItem value={'FEEDBACK'}>Feedback</MenuItem>
-                <MenuItem value={'TESTING'}>Testing</MenuItem>
-                <MenuItem value={'DONE'}>Done</MenuItem>
-                <MenuItem value={'CLOSED'}>Closed</MenuItem>
+                {this.state.issue.status.previous.map(status => (
+                  <MenuItem value={status}>{status}</MenuItem>
+                ))}
+                <Divider/>
+                <MenuItem value={this.state.initStatus}>{this.state.initStatus}</MenuItem>
+                <Divider/>
+                {this.state.issue.status.next.map(status => (
+                  <MenuItem value={status}>{status}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <br/>

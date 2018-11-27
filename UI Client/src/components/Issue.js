@@ -96,8 +96,11 @@ export default class Issue extends Component {
     assigneeMenuOpen: false,
     issue: {
       priority: 'VERY_LOW',
-      status: '',
-      assignee: {}
+      assignee: {},
+      status: {
+        next: [],
+        previous: []
+      }
     }
   };
 
@@ -111,7 +114,7 @@ export default class Issue extends Component {
       .then(res => this.setState({issue: res}))
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.loadData(this.props.match.params.issueId)
   }
 
@@ -126,6 +129,22 @@ export default class Issue extends Component {
   handleMenuClose = (event, menuAnchor, menuOpen) => {
     if (menuAnchor.contains(event.target)) return;
     this.setState({[menuOpen]: !this.state[menuOpen]});
+  };
+
+  updateStatusReq = (status) => {
+    fetch(`${config.host}/issue-tracker/issues/${this.props.match.params.issueId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      },
+      body: JSON.stringify({
+        status: {
+          current: status
+        }
+      })
+    })
+      .then(() => this.props.history.push(document.location.pathname))
   };
 
   getPriorityFragment() {
@@ -206,10 +225,19 @@ export default class Issue extends Component {
 
         <Grid container alignItems={'center'} style={styles.statusAssigneeGrid}>
           <Grid item xs={10}>
-            <Button color="secondary" style={styles.statusButton}>To Analise</Button>
-            <Button variant="contained" color="primary" style={styles.statusButton}>{this.state.issue.status}</Button>
-            <Button variant="outlined" style={styles.nextStatusButton}>To Review</Button>
-            <Button variant="outlined" style={styles.nextStatusButton}>To Testing</Button>
+            {this.state.issue.status.previous.map(status => (
+              <Button color="secondary" style={styles.statusButton} onClick={() => this.updateStatusReq(status)}>
+                {status}
+              </Button>
+            ))}
+
+            <Button variant="contained" color="primary" style={styles.statusButton}>{this.state.issue.status.current}</Button>
+
+            {this.state.issue.status.next.map(status => (
+              <Button variant="outlined" style={styles.nextStatusButton} onClick={() => this.updateStatusReq(status)}>
+                {status}
+              </Button>
+            ))}
           </Grid>
 
           <Grid item xs={2} style={styles.assigneeButtonGrid}>

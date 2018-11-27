@@ -66,8 +66,10 @@ export default class CreateIssue extends Component {
       visibleId: '',
       title: '',
       description: '',
-      status: '',
-      priority: '',
+      status: {
+        current: 'NEW'
+      },
+      priority: 'MEDIUM',
       assignee: {
         id: ''
       },
@@ -215,19 +217,18 @@ export default class CreateIssue extends Component {
               <InputLabel>Status *</InputLabel>
               <Select
                 error={this.state.hasErrors && !this.state.issue.status}
-                value={this.state.issue.status}
+                value={this.state.issue.status.current}
                 onChange={this.handleSelectChange}
                 inputProps={{name: 'status'}}
               >
-                <MenuItem value={'NEW'}>New</MenuItem>
-                <MenuItem value={'ANALISYS'}>Analisys</MenuItem>
-                <MenuItem value={'DEVELOPMENT'}>Development</MenuItem>
-                <MenuItem value={'REVIEW'}>Review</MenuItem>
-                <MenuItem value={'DEPLOYMENT'}>Deployment</MenuItem>
-                <MenuItem value={'FEEDBACK'}>Feedback</MenuItem>
-                <MenuItem value={'TESTING'}>Testing</MenuItem>
-                <MenuItem value={'DONE'}>Done</MenuItem>
-                <MenuItem value={'CLOSED'}>Closed</MenuItem>
+                <MenuItem value={'NEW'}>NEW</MenuItem>
+                <MenuItem value={'ANALYSIS'}>ANALYSIS</MenuItem>
+                <MenuItem value={'DEVELOPMENT'}>DEVELOPMENT</MenuItem>
+                <MenuItem value={'REVIEW'}>REVIEW</MenuItem>
+                <MenuItem value={'DEPLOYMENT'}>DEPLOYMENT</MenuItem>
+                <MenuItem value={'FEEDBACK'}>FEEDBACK</MenuItem>
+                <MenuItem value={'TESTING'}>TESTING</MenuItem>
+                <MenuItem value={'DONE'}>DONE</MenuItem>
               </Select>
             </FormControl>
             <br/>

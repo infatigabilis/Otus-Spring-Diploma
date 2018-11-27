@@ -247,7 +247,7 @@ export default class Review extends Component {
                     {this.getPriorityIcon(issue.priority)}
                   </Grid>
                   <Grid item xs={2} style={styles.issueStateGrid}>
-                    <Chip label={issue.status} style={styles.chip} variant="outlined" clickable={true} />
+                    <Chip label={issue.status.current} style={styles.chip} variant="outlined" clickable={true} />
                   </Grid>
                 </Grid>
               </ListItem>
