@@ -147,6 +147,22 @@ export default class Issue extends Component {
       .then(() => this.props.history.push(document.location.pathname))
   };
 
+  updateAssigneeReq = (assigneeLogin) => {
+    fetch(`${config.host}/issue-tracker/issues/${this.props.match.params.issueId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      },
+      body: JSON.stringify({
+        assignee: {
+          id: assigneeLogin
+        }
+      })
+    })
+      .then(() => this.props.history.push(document.location.pathname))
+  };
+
   getPriorityFragment() {
     switch (this.state.issue.priority) {
       case 'VERY_LOW': return (
@@ -258,7 +274,7 @@ export default class Issue extends Component {
                   <Paper>
                     <ClickAwayListener onClickAway={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
                       <MenuList>
-                        <MenuItem style={styles.assigneeToMeButton} onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
+                        <MenuItem style={styles.assigneeToMeButton} onClick={() => this.updateAssigneeReq(this.props.keycloak.tokenParsed["preferred_username"])}>
                           Assign to me
                         </MenuItem>
                         <MenuItem onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
