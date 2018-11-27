@@ -38,8 +38,7 @@ public class JwtServerSecurityContextRepository implements ServerSecurityContext
 
     public JwtServerSecurityContextRepository(
             @Value("${security.keycloak.host}") String keycloakHost,
-            @Value("${security.keycloak.realm}") String keycloakRealm
-    ) {
+            @Value("${security.keycloak.realm}") String keycloakRealm) {
         try {
             val stringUrl = MessageFormat.format("{0}/auth/realms/{1}/protocol/openid-connect/certs", keycloakHost, keycloakRealm);
             this.keySource = new RemoteJWKSet(new URL(stringUrl));

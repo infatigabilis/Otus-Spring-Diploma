@@ -2,6 +2,7 @@ package ru.otus.spring.diploma.issuetracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @EnableReactiveMongoRepositories
 @EnableEurekaClient
 @EnableHystrix
+@EnableCaching
 public class IssueTrackerApplication {
 
     public static void main(String[] args) {

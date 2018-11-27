@@ -1,5 +1,6 @@
 package ru.otus.spring.diploma.issuetracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,6 @@ public class User {
     private String email;
 
     @NotNull
+    @JsonIgnore
     private String domain;
 }

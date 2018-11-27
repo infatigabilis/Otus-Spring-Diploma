@@ -4,6 +4,10 @@ spring:
   data:
     mongodb:
       uri: mongodb://test:secret@localhost/test?authSource=admin
+  cache:
+    cache-names: users
+    caffeine:
+      spec: expireAfterWrite=5s
 
 #server:
 #  ssl:
@@ -20,6 +24,9 @@ security:
     host: http://localhost:8180
     realm: Otus-Spring-Diploma
     client: otus-spring-diploma-client
+    admin:
+      username: test
+      password: secret
 
 eureka:
   instance:
