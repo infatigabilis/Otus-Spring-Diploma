@@ -4,25 +4,26 @@
 Функционал по типу Jira. Реализован и фронтенд, и бекенд. 
  
 #### Функционал:
- - создания, редактирование, просмотр таски(поля: ид, название, описание, статус, приоритет, исполнитель, метки)
- - изменение статуса тикета (по единому флоу)
- - назначение исполнителя
- - оставление комментариев
- - дашборд тикетов исполнителя с сортировкой по приоритетам и статусам
- - обзор всех тикетов с сортировкой и поиском по меткам и исполнителям
+ - создания, редактирование, просмотр таски(поля: ид, название, описание, статус, приоритет, исполнитель, метки).
+ - изменение статуса тикета (по единому флоу).
+ - назначение исполнителя.
+ - оставление комментариев.
+ - дашборд тикетов исполнителя с сортировкой по приоритетам и статусам.
+ - обзор всех тикетов с сортировкой и поиском по меткам и исполнителям.
  
 #### Особенности:
- - бекенд построен на реактивно архитектуре (Project Reactor)
- - основное приложение(Issue Tracker) балансится на несколько нод (Zuul)
- - деплой в docker-compose одной командой
- - Signle Sing-On (Keycloak)
- - бекенд - Json REST API, фронтенд - SPA
+ - бекенд построен на реактивно архитектуре (Project Reactor).
+ - основное приложение(Issue Tracker) балансится на несколько нод (Zuul).
+ - деплой в docker-compose одной командой.
+ - Signle Sing-On (Keycloak).
+ - бекенд - Json REST API, фронтенд - SPA.
+ - поддержка роутинга в SPA, открые странице тикета по ссылке.
  
 #### Стек:
- - бекенд: Spring WebFlux, Spring Data Reactive MongoDB, Spring Reactive Security, Hystrix, Keycloak, Zuul, Eureka,
-  Mongobee
- - фронтенд: ReactJS, React Router, Material UI
- - ops: Docker, Docker Compose, Nginx(для фронтенда), Reactive MongoDB(основная бд), PosrgreSQL(бд Keycloak'a) 
+ - бекенд: Spring WebFlux, Spring Data Reactive MongoDB, Spring Reactive Security, Spring Cache, Hystrix, Keycloak, Zuul,
+  Eureka, Mongobee, Swagger.
+ - фронтенд: ReactJS, React Router, Material UI.
+ - ops: Docker, Docker Compose, Nginx(для фронтенда), Reactive MongoDB(основная бд), PosrgreSQL(бд Keycloak'a).
  
 ### Deploy
 ```
