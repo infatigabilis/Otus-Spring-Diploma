@@ -18,6 +18,8 @@ import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import FormControl from "@material-ui/core/FormControl/FormControl";
+import UserService from "../utils/UserService";
+import Divider from "@material-ui/core/Divider/Divider";
 
 const theme = createMuiTheme();
 
@@ -79,7 +81,8 @@ export default class Review extends Component {
     assigneeId: null,
     labels: [],
     priorityDirection: null,
-    statusDirection: null
+    statusDirection: null,
+    users: []
   };
 
   loadData() {
@@ -94,7 +97,9 @@ export default class Review extends Component {
       }
     })
       .then(res => res.json())
-      .then(res => this.setState({issues: res}))
+      .then(res => this.setState({issues: res}));
+
+    UserService.loadUsers(this.props.keycloak, null, users => this.setState({users: users}))
   }
 
   componentDidMount() {
@@ -178,10 +183,12 @@ export default class Review extends Component {
               inputProps={{name: 'assigneeId'}}
             >
               <MenuItem value={null}>All</MenuItem>
-              <MenuItem value={1}>Scott Matthews</MenuItem>
-              <MenuItem value={2}>Jake Moore</MenuItem>
-              <MenuItem value={3}>Javon Guzman</MenuItem>
-              <MenuItem value={4}>Robert Burke</MenuItem>
+              <Divider />
+              <MenuItem value={this.props.keycloak.tokenParsed["preferred_username"]}>{this.props.keycloak.tokenParsed["name"]}</MenuItem>
+              <Divider />
+              {this.state.users.map(user => (
+                <MenuItem value={user.id}>{user.name}</MenuItem>
+              ))}
             </Select>
           </FormControl>
           <br/>
