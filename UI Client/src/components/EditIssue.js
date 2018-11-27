@@ -15,6 +15,7 @@ import CircularProgress from "@material-ui/core/CircularProgress/CircularProgres
 import Modal from "@material-ui/core/Modal/Modal";
 import Divider from "@material-ui/core/Divider/Divider";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import UserService from "../utils/UserService";
 
 const theme = createMuiTheme();
 
@@ -63,6 +64,7 @@ export default class EditIssue extends Component {
   state = {
     hasRequestError: false,
     initStatus: '',
+    users: [],
     issue: {
       visibleId: '',
       title: '',
@@ -87,7 +89,10 @@ export default class EditIssue extends Component {
       }
     })
       .then(res => res.json())
-      .then(res => this.setState({issue: Object.assign({}, res, {id: null}), initStatus: res.status.current}))
+      .then(res => {
+        this.setState({issue: Object.assign({}, res, {id: null}), initStatus: res.status.current});
+        UserService.loadUsers(this.props.keycloak, res.assignee.id, users => this.setState({users: users}));
+      })
   }
 
   pushData = () => {
@@ -201,10 +206,11 @@ export default class EditIssue extends Component {
                 onChange={this.handleSelectChange}
                 inputProps={{name: 'assignee-id'}}
               >
-                <MenuItem value={1}>Scott Matthews</MenuItem>
-                <MenuItem value={2}>Jake Moore</MenuItem>
-                <MenuItem value={3}>Javon Guzman</MenuItem>
-                <MenuItem value={4}>Robert Burke</MenuItem>
+                <MenuItem value={this.props.keycloak.tokenParsed["preferred_username"]}>{this.props.keycloak.tokenParsed["name"]}</MenuItem>
+                <Divider/>
+                {this.state.users.map(user => (
+                  <MenuItem value={user.id}>{user.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <br/>

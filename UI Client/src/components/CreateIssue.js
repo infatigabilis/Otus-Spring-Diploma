@@ -14,6 +14,7 @@ import config from "../config";
 import Modal from "@material-ui/core/Modal/Modal";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Divider from "@material-ui/core/Divider/Divider";
+import UserService from "../utils/UserService";
 
 const theme = createMuiTheme();
 
@@ -62,6 +63,7 @@ export default class CreateIssue extends Component {
   state = {
     hasErrors: false,
     hasRequestError: false,
+    users: [],
     issue: {
       visibleId: '',
       title: '',
@@ -77,6 +79,10 @@ export default class CreateIssue extends Component {
     },
     error: {}
   };
+
+  componentDidMount() {
+    UserService.loadUsers(this.props.keycloak, null, users => this.setState({users: users}));
+  }
 
   pushData = () => {
     if (
@@ -188,10 +194,11 @@ export default class CreateIssue extends Component {
                 onChange={this.handleSelectChange}
                 inputProps={{name: 'assignee-id'}}
               >
-                <MenuItem value={1}>Scott Matthews</MenuItem>
-                <MenuItem value={2}>Jake Moore</MenuItem>
-                <MenuItem value={3}>Javon Guzman</MenuItem>
-                <MenuItem value={4}>Robert Burke</MenuItem>
+                <MenuItem value={this.props.keycloak.tokenParsed["preferred_username"]}>{this.props.keycloak.tokenParsed["name"]}</MenuItem>
+                <Divider/>
+                {this.state.users.map(user => (
+                  <MenuItem value={user.id}>{user.name}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <br/>

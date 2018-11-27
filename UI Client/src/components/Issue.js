@@ -22,6 +22,7 @@ import green from "@material-ui/core/colors/green";
 import orange from "@material-ui/core/es/colors/orange";
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import UserService from "../utils/UserService";
 
 const theme = createMuiTheme();
 
@@ -101,7 +102,8 @@ export default class Issue extends Component {
         next: [],
         previous: []
       }
-    }
+    },
+    users: []
   };
 
   loadData(issueId) {
@@ -111,7 +113,10 @@ export default class Issue extends Component {
       }
     })
       .then(res => res.json())
-      .then(res => this.setState({issue: res}))
+      .then(res => {
+        this.setState({issue: res});
+        UserService.loadUsers(this.props.keycloak, res.assignee.id, users => this.setState({users: users}))
+      });
   }
 
   componentDidMount() {
@@ -147,7 +152,7 @@ export default class Issue extends Component {
       .then(() => this.props.history.push(document.location.pathname))
   };
 
-  updateAssigneeReq = (assigneeLogin) => {
+  updateAssigneeReq = (event, assigneeLogin) => {
     fetch(`${config.host}/issue-tracker/issues/${this.props.match.params.issueId}`, {
       method: 'PUT',
       headers: {
@@ -160,7 +165,10 @@ export default class Issue extends Component {
         }
       })
     })
-      .then(() => this.props.history.push(document.location.pathname))
+      .then(() => {
+        this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen");
+        this.props.history.push(document.location.pathname)
+      })
   };
 
   getPriorityFragment() {
@@ -274,15 +282,16 @@ export default class Issue extends Component {
                   <Paper>
                     <ClickAwayListener onClickAway={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
                       <MenuList>
-                        <MenuItem style={styles.assigneeToMeButton} onClick={() => this.updateAssigneeReq(this.props.keycloak.tokenParsed["preferred_username"])}>
-                          Assign to me
-                        </MenuItem>
-                        <MenuItem onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
-                          Javon Guzman
-                        </MenuItem>
-                        <MenuItem onClick={event => this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen")}>
-                          Robert Burke
-                        </MenuItem>
+                        {this.state.issue.assignee.id !== this.props.keycloak.tokenParsed["preferred_username"] && (
+                          <MenuItem style={styles.assigneeToMeButton} onClick={event => this.updateAssigneeReq(event, this.props.keycloak.tokenParsed["preferred_username"])}>
+                            Assign to me
+                          </MenuItem>
+                        )}
+                        {this.state.users.map(user => (
+                          <MenuItem onClick={event => this.updateAssigneeReq(event, user.id)}>
+                            {user.name}
+                          </MenuItem>
+                        ))}
                       </MenuList>
                     </ClickAwayListener>
                   </Paper>
