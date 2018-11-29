@@ -5,56 +5,31 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.repository.CommentRepository;
-import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
 import ru.otus.spring.diploma.issuetracker.domain.Comment;
-import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.security.UserAuthentication;
 import ru.otus.spring.diploma.issuetracker.service.CommentService;
-import ru.otus.spring.diploma.issuetracker.service.IssueService;
 import ru.otus.spring.diploma.issuetracker.service.UserService;
 
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
-import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.HIGH;
-import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.MEDIUM;
-import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.DEVELOPMENT;
-
 public class CommentControllerTest extends AbstractControllerTest {
 
-    @Autowired private WebTestClient testClient;
-    @Autowired private CommentService commentService;
-    @Autowired private IssueRepository issueRepository;
-    @Autowired private CommentRepository commentRepository;
     @MockBean private UserService userService;
+    @Autowired private CommentService commentService;
+    @Autowired private CommentRepository commentRepository;
 
-    private final User user1 = new User("user1", "Name1", "user1@mail.com", null);
-    private final User user2 = new User("user2", "Name2", "user2@mail.com", null);
-    private final User user3 = new User("user3", "Name3", "user3@mail.com", null);
-    private final Issue issue1 = new Issue(null, "OTUS-1", "Title1", "Desc1", DEVELOPMENT, HIGH, user1, null);
-    private final Issue issue2 = new Issue(null, "OTUS-2", "Title2", "Desc2", DEVELOPMENT, MEDIUM, user3, null);
     private final Comment comment1 = new Comment(null, "Comment1", user1, issue1);
     private final Comment comment2 = new Comment(null, "Comment2", user2, issue1);
-    private final Comment comment3 = new Comment(null, "Comment3", user3, issue2);
+    private final Comment comment3 = new Comment(null, "Comment3", user3, issue6);
 
     @Before
     public void setUp() {
-        given(userService.getOneIgnoringDomain("user1")).willReturn(Mono.just(user1));
-        given(userService.getOneIgnoringDomain("user2")).willReturn(Mono.just(user2));
-        given(userService.getOneIgnoringDomain("user3")).willReturn(Mono.just(user3));
-
-        issueRepository.deleteAll().block();
         commentRepository.deleteAll().block();
-
-        seedIssue(issue1, "programming");
-        seedIssue(issue2, "business");
 
         seedComment(comment1, "programming");
         seedComment(comment2, "programming");

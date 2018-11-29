@@ -1,66 +1,26 @@
 package ru.otus.spring.diploma.issuetracker.web;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
-import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.service.UserService;
 
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.mockito.BDDMockito.given;
-import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.HIGH;
-import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.LOW;
-import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.MEDIUM;
 import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.VERY_HIGH;
-import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.DEVELOPMENT;
-import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.DONE;
 import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.NEW;
 import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.REVIEW;
-import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.TESTING;
 
 public class IssueControllerTest extends AbstractControllerTest {
 
-    @Autowired private WebTestClient testClient;
-    @Autowired private IssueRepository issueRepository;
     @MockBean private UserService userService;
-
-    private final User user1 = new User("1", "Name1", "user1@mail.com", null);
-    private final User user2 = new User("2", "Name2", "user2@mail.com", null);
-    private final User user3 = new User("3", "Name3", "user3@mail.com", null);
-    private final Issue issue1 = new Issue(null, "OTUS-1", "Title1", "Desc1", DEVELOPMENT, HIGH, user1, null);
-    private final Issue issue2 = new Issue(null, "OTUS-2", "Title2", "Desc2", DEVELOPMENT, MEDIUM, user2, null);
-    private final Issue issue3 = new Issue(null, "OTUS-3", "Title3", "Desc3", DONE, MEDIUM, user2, null);
-    private final Issue issue4 = new Issue(null, "OTUS-4", "Title4", "Desc4", NEW, LOW, user1, null);
-    private final Issue issue5 = new Issue(null, "OTUS-5", "Title5", "Desc5", TESTING, HIGH, user1, null);
-    private final Issue issue6 = new Issue(null, "PM-1", "Title5", "Desc5", TESTING, HIGH, user3, null);
-    private final Issue issue7 = new Issue(null, "PM-2", "Title5", "Desc5", TESTING, HIGH, user3, null);
-
-
-    @Before
-    public void setUp() {
-        given(userService.getOneIgnoringDomain("1")).willReturn(Mono.just(user1));
-        given(userService.getOneIgnoringDomain("2")).willReturn(Mono.just(user2));
-        given(userService.getOneIgnoringDomain("3")).willReturn(Mono.just(user3));
-
-        issueRepository.deleteAll().block();
-
-        seedIssue(issue1, "programming");
-        seedIssue(issue2, "programming");
-        seedIssue(issue3, "programming");
-        seedIssue(issue4, "programming");
-        seedIssue(issue5, "programming");
-        seedIssue(issue6, "business");
-        seedIssue(issue7, "business");
-    }
+    @Autowired private IssueRepository issueRepository;
 
 
     @Test
@@ -175,8 +135,22 @@ public class IssueControllerTest extends AbstractControllerTest {
 
     @Test
     @WithMockUser(authorities = {"programming"})
+    public void getByLabels() {
+        testClient.get()
+                .uri(builder -> builder.path("/issues")
+                        .queryParam("labelId", label1.getId())
+                        .queryParam("labelId", label2.getId())
+                        .build()
+                )
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Issue.class).isEqualTo(List.of(issue1));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"programming"})
     public void create() {
-        final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, user2, "programming");
+        final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, List.of(label1), user2, "programming");
 
         testClient.post()
                 .uri("/issues").body(Mono.just(newIssue), Issue.class)
@@ -196,8 +170,8 @@ public class IssueControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(authorities = {"programming"})
     public void create_validationError() {
-        testClient.post()
-                .uri("/issues").body(Mono.just(new Issue("1", "", "Title12", "Desc12", null, VERY_HIGH, user2, "programming")), Issue.class)
+        testClient.post().uri("/issues")
+                .body(Mono.just(new Issue("1", "", "Title12", "Desc12", null, VERY_HIGH, List.of(), user2, "programming")), Issue.class)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
@@ -215,7 +189,7 @@ public class IssueControllerTest extends AbstractControllerTest {
 
     @Test
     public void create_authError() {
-        final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, user2, "programming");
+        final var newIssue = new Issue(null, "OTUS-12", "Title12", "Desc12", NEW, VERY_HIGH, List.of(), user2, "programming");
 
         testClient.post()
                 .uri("/issues").body(Mono.just(newIssue), Issue.class)
@@ -227,7 +201,7 @@ public class IssueControllerTest extends AbstractControllerTest {
     @WithMockUser(authorities = {"programming"})
     public void create_duplicationVisibleIdError() {
         testClient.post()
-                .uri("/issues").body(Mono.just(new Issue(null, "OTUS-1", "Title12", "Desc12", NEW, VERY_HIGH, user2, "programming")), Issue.class)
+                .uri("/issues").body(Mono.just(new Issue(null, "OTUS-1", "Title12", "Desc12", NEW, VERY_HIGH, List.of(), user2, "programming")), Issue.class)
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody()
@@ -249,6 +223,25 @@ public class IssueControllerTest extends AbstractControllerTest {
 
         issue1.setTitle("New title");
         issue1.setDescription("New description");
+
+        testClient.get()
+                .uri("/issues/" + issue1.getVisibleId())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Issue.class).isEqualTo(issue1);
+    }
+
+    @Test
+    @WithMockUser(authorities = {"programming"})
+    public void edit_label() {
+        testClient.put()
+                .uri("/issues/" + issue1.getVisibleId())
+                .body(Mono.just(Issue.builder().labels(List.of()).build()), Issue.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody().isEmpty();
+
+        issue1.setLabels(List.of());
 
         testClient.get()
                 .uri("/issues/" + issue1.getVisibleId())

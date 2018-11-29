@@ -12,12 +12,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.groups.Default;
+import java.util.List;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Issue {
 
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @NotBlank(groups = Default.class)
+    @NotBlank
     @Null(groups = {Create.class, Edit.class})
     private String id;
 
@@ -37,12 +37,16 @@ public class Issue {
     @NotNull(groups = {Default.class, Create.class})
     private Priority priority;
 
+    @NotNull
+    private List<Label> labels;
+
+
     @NotNull(groups = {Default.class, Create.class})
     private User assignee;
 
 
     @JsonIgnore
-    @NotNull(groups = {Default.class})
+    @NotBlank
     private String domain;
 
 

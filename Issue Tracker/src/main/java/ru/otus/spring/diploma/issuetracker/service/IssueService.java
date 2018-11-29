@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.dpo.IssueDpo;
 import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
+import ru.otus.spring.diploma.issuetracker.db.repository.LabelRepository;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.exception.ExternalServiceUnavailableException;
@@ -27,6 +28,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.contains;
 import static ru.otus.spring.diploma.issuetracker.domain.Issue.Priority.VERY_LOW;
 import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.CLOSED;
 import static ru.otus.spring.diploma.issuetracker.service.UserService.FALLBACK_USER;
@@ -37,16 +39,18 @@ public class IssueService {
     private final static Logger logger = LoggerFactory.getLogger(IssueService.class);
 
     public final static Issue FALLBACK_ISSUE = new Issue("unknown", "UNKNOWN", "Unknown issue (Internal error)",
-            "Internal error occurred. Please contact our support", CLOSED, VERY_LOW, FALLBACK_USER, null);
+            "Internal error occurred. Please contact our support", CLOSED, VERY_LOW, List.of(), FALLBACK_USER, null);
 
     private final CommonUtils commonUtils;
     private final IssueRepository issueRepository;
+    private final LabelRepository labelRepository;
     private final UserService userService;
 
 
-    public IssueService(CommonUtils commonUtils, IssueRepository issueRepository, UserService userService) {
+    public IssueService(CommonUtils commonUtils, IssueRepository issueRepository, LabelRepository labelRepository, UserService userService) {
         this.commonUtils = commonUtils;
         this.issueRepository = issueRepository;
+        this.labelRepository = labelRepository;
         this.userService = userService;
     }
 
@@ -70,19 +74,17 @@ public class IssueService {
                 ExampleMatcher.matching().withIgnoreNullValues()
         );
 
-//        TODO: refactor this snippet to more pretty and correct...
-        final var result = issueRepository
-                .findAll(exampleTerm, sort)
-                .collectList()
-                .zipWith(
-                        issueRepository.findAll(exampleTerm, sort).flatMap(this::dpoToDomain).collectList(),
-                        (orderedList, listWithResolvedUsers) -> orderedList.stream()
-                                .map(i -> listWithResolvedUsers.stream()
-                                        .filter(ii -> ii.getId().equals(i.getId()))
-                                        .findAny().orElse(null)
-                                )
-                                .collect(toList())
-                );
+        val orderedIssuesMono = issueRepository.findAll(exampleTerm, sort).collectList();
+        val issuesWithResolvedUsersMono = issueRepository.findAll(exampleTerm, sort).flatMap(this::dpoToDomain).collectList();
+
+        final var result = Mono.zip(orderedIssuesMono, issuesWithResolvedUsersMono, (orderedIssues, issuesWithResolvedUsers) ->
+                orderedIssues.stream()
+                    .map(i -> issuesWithResolvedUsers.stream()
+                            .filter(ii -> ii.getId().equals(i.getId()))
+                            .findAny().orElse(null)
+                    )
+                    .collect(toList())
+        );
 
         return HystrixCommands.from(result).commandName("IssueService.getMany")
                 .fallback(cause -> {
@@ -129,11 +131,13 @@ public class IssueService {
 
 
     private Mono<Issue> dpoToDomain(IssueDpo dpo) {
-        return userService.getOneIgnoringDomain(dpo.getAssigneeId())
-                .switchIfEmpty(Mono.defer(() -> {
-                    logger.error("User not found by id '{}' for issue '{}'", dpo.getAssigneeId(), dpo.getId());
-                    return Mono.just(new User(dpo.getAssigneeId(), "Deleted user", null, null));
-                }))
-                .map(dpo::toDomain);
+        val userMono = userService.getOneIgnoringDomain(dpo.getAssigneeId()).switchIfEmpty(Mono.defer(() -> {
+            logger.error("User not found by id '{}' for issue '{}'", dpo.getAssigneeId(), dpo.getId());
+            return Mono.just(new User(dpo.getAssigneeId(), "Deleted user", null, null));
+        }));
+
+        val labelsMono = labelRepository.findAllById(dpo.getLabelIds()).collectList();
+
+        return Mono.zip(userMono, labelsMono, dpo::toDomain);
     }
 }

@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
+import ru.otus.spring.diploma.issuetracker.domain.Label;
 import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.exception.EntityNotFoundException;
 import ru.otus.spring.diploma.issuetracker.service.IssueService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController @RequestMapping("issues")
 public class IssueController {
@@ -36,12 +38,14 @@ public class IssueController {
     @GetMapping
     public Mono<List<Issue>> getMany(
             @RequestParam(required = false) String assigneeId,
+            @RequestParam(required = false, name = "labelId") List<String> labelIds,
             @RequestParam(required = false) Sort.Direction priorityDirection,
             @RequestParam(required = false) Sort.Direction statusDirection,
             Authentication auth) {
 
         final var exampleIssue = Issue.builder()
                 .assignee(User.builder().id(assigneeId).build())
+                .labels(labelIds != null ? labelIds.stream().map(id -> new Label(id, null, null)).collect(Collectors.toList()) : null)
                 .build();
 
         var sortTerm = Sort.unsorted();

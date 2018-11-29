@@ -12,7 +12,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.IssueStatus;
+import ru.otus.spring.diploma.issuetracker.domain.Label;
 import ru.otus.spring.diploma.issuetracker.domain.User;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @Document
@@ -24,6 +28,8 @@ public class IssueDpo {
 
     private Integer statusOrdinal;
     private Integer priorityOrdinal;
+    private List<String> labelIds;
+
     private String assigneeId;
 
     private String domain;
@@ -33,14 +39,15 @@ public class IssueDpo {
         val dpo = new IssueDpo();
         BeanUtils.copyProperties(domain, dpo);
 
-        dpo.setAssigneeId(domain.getAssignee() != null ? domain.getAssignee().getId() : null);
         dpo.setStatusOrdinal(domain.getStatus() != null ? domain.getStatus().ordinal() : null);
         dpo.setPriorityOrdinal(domain.getPriority() != null ? domain.getPriority().ordinal() : null);
+        dpo.setLabelIds(domain.getLabels() != null ? domain.getLabels().stream().map(Label::getId).collect(Collectors.toList()) : null);
+        dpo.setAssigneeId(domain.getAssignee() != null ? domain.getAssignee().getId() : null);
 
         return dpo;
     }
 
-    public Issue toDomain(User assignee) {
+    public Issue toDomain(User assignee, List<Label> labels) {
         val domain = new Issue();
         BeanUtils.copyProperties(this, domain);
 
@@ -49,6 +56,7 @@ public class IssueDpo {
         domain.setAssignee(assignee);
         domain.setPriority(Issue.Priority.values()[priorityOrdinal]);
         domain.setStatus(IssueStatus.values()[statusOrdinal]);
+        domain.setLabels(labels);
 
         return domain;
     }
