@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.dpo.IssueDpo;
 import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
@@ -68,32 +69,22 @@ public class IssueService {
                 .toMono();
     }
 
-    public Mono<List<Issue>> getMany(@NotNull Issue example, @NotNull Sort sort, @NotNull Authentication auth) {
+    public Flux<Issue> getMany(@NotNull Issue example, @NotNull Sort sort, @NotNull Authentication auth) {
         val exampleTerm = Example.of(
                 IssueDpo.fromDomain(example.withDomain(commonUtils.extractDomain(auth))),
                 ExampleMatcher.matching().withIgnoreNullValues()
         );
 
-        val orderedIssuesMono = issueRepository.findAll(exampleTerm, sort).collectList();
-        val issuesWithResolvedUsersMono = issueRepository.findAll(exampleTerm, sort).flatMap(this::dpoToDomain).collectList();
-
-        final var result = Mono.zip(orderedIssuesMono, issuesWithResolvedUsersMono, (orderedIssues, issuesWithResolvedUsers) ->
-                orderedIssues.stream()
-                    .map(i -> issuesWithResolvedUsers.stream()
-                            .filter(ii -> ii.getId().equals(i.getId()))
-                            .findAny().orElse(null)
-                    )
-                    .collect(toList())
-        );
+        final var result = issueRepository.findAll(exampleTerm, sort).flatMapSequential(this::dpoToDomain);
 
         return HystrixCommands.from(result).commandName("IssueService.getMany")
                 .fallback(cause -> {
-                    return Mono.fromCallable(() -> {
+                    return Flux.defer(() -> {
                         commonUtils.logFallback(logger, "getMany", List.of(example, sort, auth), cause);
-                        return List.of();
+                        return Flux.empty();
                     });
                 })
-                .toMono();
+                .toFlux();
     }
 
     @Validated(Create.class)

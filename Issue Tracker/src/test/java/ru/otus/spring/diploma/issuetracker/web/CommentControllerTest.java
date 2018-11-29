@@ -23,9 +23,9 @@ public class CommentControllerTest extends AbstractControllerTest {
     @Autowired private CommentService commentService;
     @Autowired private CommentRepository commentRepository;
 
-    private final Comment comment1 = new Comment(null, "Comment1", user1, issue1);
-    private final Comment comment2 = new Comment(null, "Comment2", user2, issue1);
-    private final Comment comment3 = new Comment(null, "Comment3", user3, issue6);
+    private final Comment comment1 = new Comment(null, "Comment1", null, user1, issue1);
+    private final Comment comment2 = new Comment(null, "Comment2", null, user2, issue1);
+    private final Comment comment3 = new Comment(null, "Comment3", null, user3, issue6);
 
     @Before
     public void setUp() {
@@ -71,7 +71,7 @@ public class CommentControllerTest extends AbstractControllerTest {
         val auth = new UserAuthentication(User.builder().id("user1").domain("programming").build());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        val newComment = new Comment(null, "Comment4", user1, issue1);
+        val newComment = new Comment(null, "Comment4", null, null, issue1);
 
         testClient.post().uri("/comments?issueVisibleId=" + issue1.getVisibleId())
                 .body(Mono.just(newComment), Comment.class)
@@ -80,8 +80,7 @@ public class CommentControllerTest extends AbstractControllerTest {
 
         comment1.setIssue(null);
         comment2.setIssue(null);
-        newComment.setId(commentService.getAllByIssueVisibleId(newComment.getIssue().getVisibleId(), auth).block().stream().reduce((f, s) -> s).get().getId());
-        newComment.setId(commentService.getAllByIssueVisibleId(newComment.getIssue().getVisibleId(), auth).block().stream().reduce((f, s) -> s).get().getId());
+        newComment.setId(commentService.getAllByIssueVisibleId(newComment.getIssue().getVisibleId(), auth).blockLast().getId());
         newComment.setIssue(null);
 
         testClient.get().uri("/comments?issueVisibleId=" + issue1.getVisibleId())
@@ -100,7 +99,7 @@ public class CommentControllerTest extends AbstractControllerTest {
     @Test
     @WithMockUser(authorities = "business")
     public void add_withWrongDomain_returnError() {
-        val newComment = new Comment(null, "Comment4", user1, issue1);
+        val newComment = new Comment(null, "Comment4", null, null, null);
 
         testClient.post().uri("/comments?issueVisibleId=" + issue1.getVisibleId())
                 .body(Mono.just(newComment), Comment.class)
@@ -113,7 +112,7 @@ public class CommentControllerTest extends AbstractControllerTest {
         val auth = new UserAuthentication(User.builder().id(comment.getUser().getId()).domain(authority).build());
 
         commentService.add(comment, comment.getIssue().getVisibleId(), auth).block();
-        comment.setId(commentService.getAllByIssueVisibleId(comment.getIssue().getVisibleId(), auth).block().stream().reduce((f, s) -> s).get().getId());
+        comment.setId(commentService.getAllByIssueVisibleId(comment.getIssue().getVisibleId(), auth).blockLast().getId());
 
         comment.getIssue().setDomain(null);
     }

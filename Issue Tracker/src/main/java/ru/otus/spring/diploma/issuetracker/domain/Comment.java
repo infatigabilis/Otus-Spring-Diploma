@@ -26,11 +26,11 @@ public class Comment {
     private String text;
 
     @Null
-    private User user;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    private Date date;
 
     @Null
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    private final Date date = new Date();
+    private User user;
 
     @JsonIgnore
     private Issue issue;

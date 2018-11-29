@@ -8,6 +8,7 @@ import org.springframework.cloud.netflix.hystrix.HystrixCommands;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.dpo.CommentDpo;
 import ru.otus.spring.diploma.issuetracker.db.repository.CommentRepository;
@@ -21,6 +22,7 @@ import ru.otus.spring.diploma.issuetracker.utils.ValidationGroups.Create;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -41,19 +43,19 @@ public class CommentService {
     }
 
 
-    public Mono<List<Comment>> getAllByIssueVisibleId(@NotBlank String issueVisibleId, @NotNull Authentication auth) {
-        final var result = issueService.getByVisibleId(issueVisibleId, auth).flatMap(issue ->
-                commentRepository.findAllByIssueId(issue.getId()).flatMap(dpo -> dpoToDomain(dpo, issue)).collectList()
+    public Flux<Comment> getAllByIssueVisibleId(@NotBlank String issueVisibleId, @NotNull Authentication auth) {
+        final var result = issueService.getByVisibleId(issueVisibleId, auth).flatMapMany(issue ->
+                commentRepository.findAllByIssueId(issue.getId()).flatMapSequential(dpo -> dpoToDomain(dpo, issue))
         );
 
         return HystrixCommands.from(result).commandName("CommentService.getAllByIssueVisibleId")
                 .fallback(cause -> {
-                    return Mono.fromCallable(() -> {
+                    return Flux.defer(() -> {
                         commonUtils.logFallback(logger, "getAllByIssueVisibleId", List.of(issueVisibleId, auth), cause);
-                        return List.of();
+                        return Flux.empty();
                     });
                 })
-                .toMono();
+                .toFlux();
     }
 
     @Validated(Create.class)
@@ -62,6 +64,7 @@ public class CommentService {
                 userService.getOneIgnoringDomain(auth.getPrincipal().toString()).flatMap(user -> {
                     comment.setIssue(issue);
                     comment.setUser(user);
+                    comment.setDate(new Date());
                     return commentRepository.save(CommentDpo.fromDomain(comment)).then();
                 })
         );

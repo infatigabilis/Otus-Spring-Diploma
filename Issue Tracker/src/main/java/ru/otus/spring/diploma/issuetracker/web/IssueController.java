@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.Label;
 import ru.otus.spring.diploma.issuetracker.domain.User;
 import ru.otus.spring.diploma.issuetracker.exception.EntityNotFoundException;
+import ru.otus.spring.diploma.issuetracker.security.UserAuthentication;
 import ru.otus.spring.diploma.issuetracker.service.IssueService;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public class IssueController {
     }
 
     @GetMapping
-    public Mono<List<Issue>> getMany(
+    public Flux<Issue> getMany(
             @RequestParam(required = false) String assigneeId,
             @RequestParam(required = false, name = "labelId") List<String> labelIds,
             @RequestParam(required = false) Sort.Direction priorityDirection,

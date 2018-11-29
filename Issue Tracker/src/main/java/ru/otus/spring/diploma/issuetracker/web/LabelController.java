@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.domain.Label;
 import ru.otus.spring.diploma.issuetracker.service.LabelService;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController @RequestMapping("labels")
@@ -20,7 +21,7 @@ public class LabelController {
 
 
     @GetMapping
-    public Mono<List<Label>> getAll(Authentication auth) {
+    public Mono<List<Label>> getAll(@NotNull Authentication auth) {
         return labelService.getAll(auth);
     }
 }
