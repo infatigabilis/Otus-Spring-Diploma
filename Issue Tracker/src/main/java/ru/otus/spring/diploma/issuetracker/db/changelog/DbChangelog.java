@@ -171,10 +171,10 @@ public class DbChangelog {
         val issues = new ArrayList<String>(){{ issueCollection.find().as(Map.class).forEach(v -> add(v.get("_id").toString())); }};
 
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT1, "user1", issues.get(0))
+                new CommentDpo(null, TEXT1, "user2", issues.get(0))
         ));
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT2, "user1", issues.get(0))
+                new CommentDpo(null, TEXT2, "user2", issues.get(0))
         ));
         commentCollection.insert(toSpringDocument(
                 new CommentDpo(null, TEXT3, "user1", issues.get(0))
@@ -184,27 +184,27 @@ public class DbChangelog {
                 new CommentDpo(null, TEXT4, "user1", issues.get(1))
         ));
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT5, "user1", issues.get(1))
+                new CommentDpo(null, TEXT5, "user3", issues.get(1))
         ));
 
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT6, "user1", issues.get(3))
+                new CommentDpo(null, TEXT6, "user2", issues.get(3))
         ));
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT7, "user1", issues.get(3))
+                new CommentDpo(null, TEXT7, "user3", issues.get(3))
         ));
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT8, "user1", issues.get(3))
+                new CommentDpo(null, TEXT8, "user3", issues.get(3))
         ));
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT9, "user1", issues.get(3))
+                new CommentDpo(null, TEXT9, "user2", issues.get(3))
         ));
 
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT9, "user1", issues.get(19))
+                new CommentDpo(null, TEXT9, "user4", issues.get(19))
         ));
         commentCollection.insert(toSpringDocument(
-                new CommentDpo(null, TEXT10, "user1", issues.get(19))
+                new CommentDpo(null, TEXT10, "user5", issues.get(19))
         ));
     }
 

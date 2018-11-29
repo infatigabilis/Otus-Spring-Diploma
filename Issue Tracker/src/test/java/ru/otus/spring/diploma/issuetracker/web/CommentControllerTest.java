@@ -81,6 +81,7 @@ public class CommentControllerTest extends AbstractControllerTest {
         comment1.setIssue(null);
         comment2.setIssue(null);
         newComment.setId(commentService.getAllByIssueVisibleId(newComment.getIssue().getVisibleId(), auth).block().stream().reduce((f, s) -> s).get().getId());
+        newComment.setId(commentService.getAllByIssueVisibleId(newComment.getIssue().getVisibleId(), auth).block().stream().reduce((f, s) -> s).get().getId());
         newComment.setIssue(null);
 
         testClient.get().uri("/comments?issueVisibleId=" + issue1.getVisibleId())
