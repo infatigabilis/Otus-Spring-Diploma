@@ -23,6 +23,7 @@ import orange from "@material-ui/core/es/colors/orange";
 import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import UserService from "../utils/UserService";
+import moment from "moment";
 
 const theme = createMuiTheme();
 
@@ -101,9 +102,12 @@ export default class Issue extends Component {
       status: {
         next: [],
         previous: []
-      }
+      },
+      labels: []
     },
-    users: []
+    comments: [],
+    users: [],
+    comment: ''
   };
 
   loadData(issueId) {
@@ -117,14 +121,39 @@ export default class Issue extends Component {
         this.setState({issue: res});
         UserService.loadUsers(this.props.keycloak, res.assignee.id, users => this.setState({users: users}))
       });
+
+    fetch(`${config.host}/issue-tracker/comments?issueVisibleId=${issueId}`, {
+      headers: {
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => this.setState({comments: res}));
   }
 
+  postComment = () => {
+    fetch(`${config.host}/issue-tracker/comments/?issueVisibleId=${this.props.match.params.issueId}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.props.keycloak.token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: this.state.comment
+      })
+    })
+      .then(res => {
+        this.loadData(this.props.match.params.issueId);
+        this.setState({comment: ''});
+      })
+  };
+
   componentDidMount() {
-    this.loadData(this.props.match.params.issueId)
+    this.loadData(this.props.match.params.issueId);
   }
 
   componentWillReceiveProps(props, context) {
-    this.loadData(props.match.params.issueId)
+    this.loadData(props.match.params.issueId);
   }
 
   handleMenuToggle = (menuOpen) => {
@@ -169,6 +198,10 @@ export default class Issue extends Component {
         this.handleMenuClose(event, this.assigneeMenuAnchor, "assigneeMenuOpen");
         this.props.history.push(document.location.pathname)
       })
+  };
+
+  handleCommentChange = (event) => {
+    this.setState({comment: event.target.value})
   };
 
   getPriorityFragment() {
@@ -312,9 +345,9 @@ export default class Issue extends Component {
             <Grid item xs={6}>
               <div style={styles.infoItemDiv}>
                 <Typography variant="subtitle1" style={styles.infoTitle}>Labels:</Typography>
-                <Chip variant="outlined" label="One" style={styles.labelChip} />
-                <Chip variant="outlined" label="Two" style={styles.labelChip} />
-                <Chip variant="outlined" label="Three" style={styles.labelChip} />
+                {this.state.issue.labels.map(label => (
+                  <Chip variant="outlined" label={label.value} style={styles.labelChip} />
+                ))}
               </div>
             </Grid>
           </Grid>
@@ -344,42 +377,17 @@ export default class Issue extends Component {
         <div id="comment-div" style={styles.commentDiv}>
           <Typography variant="h6">Commentaries</Typography>
 
-          <TextField
-            id="outlined-full-width"
-            label="Ivanov Danil, 20.11.18"
-            value="Suspendisse ac commodo lacus. Donec nulla magna, euismod sed leo at, tempus pellentesque eros. Donec pellentesque nulla ac sem feugiat, vitae molestie nulla dapibus. Praesent volutpat at ligula ac dignissim. Donec sit amet lacinia purus. Quisque a mauris eleifend, tempor arcu feugiat, hendrerit massa. Maecenas consequat tempor fringilla"
-            fullWidth
-            disabled
-            multiline
-            margin="normal"
-          />
-          <TextField
-            id="outlined-full-width"
-            label="Ivanov Danil, 20.11.18"
-            value="Etiam tincidunt cursus tortor, a consequat nisi tincidunt vitae. Vestibulum mollis urna a metus lobortis bibendum. Quisque porttitor urna nec mollis ultrices. Nullam condimentum ex ligula, a accumsan ligula consequat ut"
-            fullWidth
-            disabled
-            multiline
-            margin="normal"
-          />
-          <TextField
-            id="outlined-full-width"
-            label="Ivanov Danil, 23.11.18"
-            value="Done. Created merge request"
-            fullWidth
-            disabled
-            multiline
-            margin="normal"
-          />
-          <TextField
-            id="outlined-full-width"
-            label="Ivanov Danil, 24.11.18"
-            value="Released version 0.1.12"
-            fullWidth
-            disabled
-            multiline
-            margin="normal"
-          />
+          {this.state.comments.map(comment => (
+            <TextField
+              id="outlined-full-width"
+              label={comment.user.name + ', ' + moment(new Date(comment.date)).format("hh:mm DD.MM.YYYY")}
+              value={comment.text}
+              fullWidth
+              disabled
+              multiline
+              margin="normal"
+            />
+          ))}
 
           <TextField
             id="filled-full-width"
@@ -388,9 +396,11 @@ export default class Issue extends Component {
             multiline
             margin="normal"
             variant="outlined"
+            value={this.state.comment}
+            onChange={this.handleCommentChange}
           />
           <div style={styles.sendButtonDiv}>
-            <Button variant="outlined" color="primary">Send</Button>
+            <Button variant="outlined" color="primary" onClick={this.postComment}>Send</Button>
           </div>
         </div>
       </Paper>

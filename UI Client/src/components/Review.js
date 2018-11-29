@@ -67,13 +67,6 @@ const styles = {
   },
 };
 
-const allLabels = [
-  'One',
-  'Two',
-  'Three',
-  'Four',
-];
-
 export default class Review extends Component {
 
   state = {
@@ -82,7 +75,8 @@ export default class Review extends Component {
     labels: [],
     priorityDirection: null,
     statusDirection: null,
-    users: []
+    users: [],
+    allLabels: []
   };
 
   loadData() {
@@ -90,6 +84,7 @@ export default class Review extends Component {
     if (this.state.assigneeId) url.searchParams.set('assigneeId', this.state.assigneeId);
     if (this.state.priorityDirection) url.searchParams.set('priorityDirection', this.state.priorityDirection);
     if (this.state.statusDirection) url.searchParams.set('statusDirection', this.state.statusDirection);
+    if (this.state.labels) this.state.labels.forEach(label => url.searchParams.append('labelId', label));
 
     fetch(url.toString(), {
       headers: {
@@ -98,11 +93,22 @@ export default class Review extends Component {
     })
       .then(res => res.json())
       .then(res => this.setState({issues: res}));
+  }
 
-    UserService.loadUsers(this.props.keycloak, null, users => this.setState({users: users}))
+  loadInitData() {
+    UserService.loadUsers(this.props.keycloak, null, users => this.setState({users: users}));
+
+    fetch(`${config.host}/issue-tracker/labels`, {
+      headers: {
+        'Authorization': `Bearer ${this.props.keycloak.token}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => this.setState({allLabels: res}));
   }
 
   componentDidMount() {
+    this.loadInitData();
     this.loadData()
   }
 
@@ -197,13 +203,13 @@ export default class Review extends Component {
             <InputLabel>Labels</InputLabel>
             <Select
               multiple
-              value={this.state.labels ? this.state.labels : []}
+              value={this.state.labels}
               onChange={this.handleSelectChange}
               inputProps={{name: 'labels'}}
             >
-              {allLabels.map(label => (
-                <MenuItem key={label} value={label}>
-                  {label}
+              {this.state.allLabels.map(label => (
+                <MenuItem key={label.id} value={label.id}>
+                  {label.value}
                 </MenuItem>
               ))}
             </Select>
