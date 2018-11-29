@@ -76,7 +76,7 @@ public class UserService {
     }
 
     @Cacheable("users")
-    public Mono<List<User>> getAll(String domain) {
+    public Mono<List<User>> getAll(@NotBlank String domain) {
         val result = getKeycloakAdminAccessToken().flatMap(adminToken ->
             getKeycloakUsers(adminToken, null).map(keycloakUsers ->
                     keycloakUsers.stream()
@@ -89,7 +89,7 @@ public class UserService {
         return HystrixCommands.from(result).commandName("IssueService.getAll")
                 .fallback(cause -> {
                     return Mono.fromCallable(() -> {
-                        commonUtils.logFallback(logger, "getAll", List.of(), cause);
+                        commonUtils.logFallback(logger, "getAll", List.of(domain), cause);
                         return List.of(FALLBACK_USER);
                     });
                 })

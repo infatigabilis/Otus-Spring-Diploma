@@ -51,27 +51,27 @@ public class IssueService {
     }
 
 
-    public Mono<Issue> getByVisibleId(@NotBlank String issueVisibleId, Authentication auth) {
-        val result = issueRepository.findByVisibleIdAndDomain(issueVisibleId, commonUtils.extractDomain(auth)).flatMap(this::dpoToDomain);
+    public Mono<Issue> getByVisibleId(@NotBlank String issueVisibleId, @NotNull Authentication auth) {
+        final var result = issueRepository.findByVisibleIdAndDomain(issueVisibleId, commonUtils.extractDomain(auth)).flatMap(this::dpoToDomain);
 
         return HystrixCommands.from(result).commandName("IssueService.getByVisibleId")
                 .fallback(cause -> {
                     return Mono.fromCallable(() -> {
-                        commonUtils.logFallback(logger, "getByVisibleId", List.of(issueVisibleId), cause);
+                        commonUtils.logFallback(logger, "getByVisibleId", List.of(issueVisibleId, auth), cause);
                         return FALLBACK_ISSUE;
                     });
                 })
                 .toMono();
     }
 
-    public Mono<List<Issue>> getMany(@NotNull Issue example, @NotNull Sort sort, Authentication auth) {
+    public Mono<List<Issue>> getMany(@NotNull Issue example, @NotNull Sort sort, @NotNull Authentication auth) {
         val exampleTerm = Example.of(
                 IssueDpo.fromDomain(example.withDomain(commonUtils.extractDomain(auth))),
                 ExampleMatcher.matching().withIgnoreNullValues()
         );
 
 //        TODO: refactor this snippet to more pretty and correct...
-        val result = issueRepository
+        final var result = issueRepository
                 .findAll(exampleTerm, sort)
                 .collectList()
                 .zipWith(
@@ -87,22 +87,22 @@ public class IssueService {
         return HystrixCommands.from(result).commandName("IssueService.getMany")
                 .fallback(cause -> {
                     return Mono.fromCallable(() -> {
-                        commonUtils.logFallback(logger, "getMany", List.of(example, sort), cause);
-                        return List.of(FALLBACK_ISSUE);
+                        commonUtils.logFallback(logger, "getMany", List.of(example, sort, auth), cause);
+                        return List.of();
                     });
                 })
                 .toMono();
     }
 
     @Validated(Create.class)
-    public Mono<Void> createIssue(@Valid Issue issue, Authentication auth) {
-        val result = issueRepository.save(IssueDpo.fromDomain(issue.withDomain(commonUtils.extractDomain(auth)))).then();
+    public Mono<Void> createIssue(@Valid Issue issue, @NotNull Authentication auth) {
+        final var result = issueRepository.save(IssueDpo.fromDomain(issue.withDomain(commonUtils.extractDomain(auth)))).then();
 
         return HystrixCommands.from(result).commandName("IssueService.createIssue")
                 .fallback(cause -> {
                     return Mono.fromCallable(() -> {
                         commonUtils.ignoreFallbackException(cause, DuplicateKeyException.class);
-                        commonUtils.logFallback(logger, "createIssue", List.of(issue), cause);
+                        commonUtils.logFallback(logger, "createIssue", List.of(issue, auth), cause);
                         throw new ExternalServiceUnavailableException();
                     });
                 })
@@ -110,8 +110,8 @@ public class IssueService {
     }
 
     @Validated(Edit.class)
-    public Mono<Void> editIssue(@NotBlank String originalIssueVisibleId, @Valid Issue diffIssue, Authentication auth) {
-        val result = issueRepository.findByVisibleIdAndDomain(originalIssueVisibleId, commonUtils.extractDomain(auth)).flatMap(issue -> {
+    public Mono<Void> editIssue(@NotBlank String originalIssueVisibleId, @Valid Issue diffIssue, @NotNull Authentication auth) {
+        final var result = issueRepository.findByVisibleIdAndDomain(originalIssueVisibleId, commonUtils.extractDomain(auth)).flatMap(issue -> {
             commonUtils.mergeObjects(issue, IssueDpo.fromDomain(diffIssue), IssueDpo.class);
             commonUtils.validate(issue);
             return issueRepository.save(issue).then();
@@ -120,7 +120,7 @@ public class IssueService {
         return HystrixCommands.from(result).commandName("IssueService.editIssue")
                 .fallback(cause -> {
                     return Mono.fromCallable(() -> {
-                        commonUtils.logFallback(logger, "editIssue", List.of(originalIssueVisibleId, diffIssue), cause);
+                        commonUtils.logFallback(logger, "editIssue", List.of(originalIssueVisibleId, diffIssue, auth), cause);
                         throw new ExternalServiceUnavailableException();
                     });
                 })

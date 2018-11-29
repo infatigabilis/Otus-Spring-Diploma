@@ -13,3 +13,10 @@ security:
 eureka:
   client:
     enabled: false
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false

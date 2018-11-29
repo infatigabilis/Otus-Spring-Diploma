@@ -1,6 +1,5 @@
 package ru.otus.spring.diploma.issuetracker.web;
 
-import lombok.val;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import reactor.core.publisher.Mono;
 import ru.otus.spring.diploma.issuetracker.db.repository.IssueRepository;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.User;
-import ru.otus.spring.diploma.issuetracker.security.UserAuthentication;
-import ru.otus.spring.diploma.issuetracker.service.IssueService;
 import ru.otus.spring.diploma.issuetracker.service.UserService;
 
 import java.util.List;
@@ -32,18 +29,9 @@ import static ru.otus.spring.diploma.issuetracker.domain.IssueStatus.TESTING;
 
 public class IssueControllerTest extends AbstractControllerTest {
 
-    @Autowired
-    private WebTestClient testClient;
-
-    @Autowired
-    private IssueService issueService;
-
-    @Autowired
-    private IssueRepository issueRepository;
-
-    @MockBean
-    private UserService userService;
-
+    @Autowired private WebTestClient testClient;
+    @Autowired private IssueRepository issueRepository;
+    @MockBean private UserService userService;
 
     private final User user1 = new User("1", "Name1", "user1@mail.com", null);
     private final User user2 = new User("2", "Name2", "user2@mail.com", null);
@@ -329,15 +317,5 @@ public class IssueControllerTest extends AbstractControllerTest {
                 .body(Mono.just(Issue.builder().title("New title").description("New description").build()), Issue.class)
                 .exchange()
                 .expectStatus().isUnauthorized();
-    }
-
-
-    private void seedIssue(Issue issue, String authority) {
-        val auth = new UserAuthentication(User.builder().domain(authority).build());
-
-        issueService.createIssue(issue, auth).block();
-        issue.setId(issueService.getByVisibleId(issue.getVisibleId(), auth).block().getId());
-
-        issue.setDomain(null);
     }
 }

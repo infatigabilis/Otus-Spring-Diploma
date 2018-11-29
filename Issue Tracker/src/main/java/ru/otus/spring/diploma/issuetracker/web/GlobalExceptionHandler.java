@@ -58,13 +58,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(code = NOT_FOUND)
     public ExceptionEntity entityNotFoundException(EntityNotFoundException e) {
-        return ExceptionEntity.builder().status(400).exception(e).message("Entity not found").build();
+        return ExceptionEntity.builder().status(404).exception(e).message("Entity not found").build();
     }
 
     @ExceptionHandler(HystrixRuntimeException.class)
     public ResponseEntity<ExceptionEntity> hystrixRuntimeException(HystrixRuntimeException e) {
         if (e.getCause() instanceof DuplicateKeyException) {
             return ResponseEntity.status(400).body(commonBadRequestException((DuplicateKeyException) e.getCause()));
+        } else if (e.getCause() instanceof EntityNotFoundException) {
+            return ResponseEntity.status(404).body(entityNotFoundException((EntityNotFoundException) e.getCause()));
         } else {
             return commonException((Exception) e.getCause());
         }
