@@ -13,12 +13,15 @@ import ru.otus.spring.diploma.issuetracker.domain.Comment;
 import ru.otus.spring.diploma.issuetracker.domain.Issue;
 import ru.otus.spring.diploma.issuetracker.domain.User;
 
+import java.util.Date;
+
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @Document
 public class CommentDpo {
     private @Id String id;
     private String text;
     private String userId;
+    private Date date;
     private String issueId;
 
     public static CommentDpo fromDomain(Comment domain) {
