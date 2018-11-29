@@ -35,7 +35,7 @@ const styles = {
     borderColor: '#fff'
   },
   statusAssigneeGrid: {
-    padding: '20px 5px'
+    padding: '20px 20px'
   },
   statusButton: {
     marginRight: 15
