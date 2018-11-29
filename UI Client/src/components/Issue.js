@@ -283,7 +283,7 @@ export default class Issue extends Component {
         <Grid container alignItems={'center'} style={styles.statusAssigneeGrid}>
           <Grid item xs={10}>
             {this.state.issue.status.previous.map(status => (
-              <Button color="secondary" style={styles.statusButton} onClick={() => this.updateStatusReq(status)}>
+              <Button variant="outlined" color="secondary" style={styles.statusButton} onClick={() => this.updateStatusReq(status)}>
                 {status}
               </Button>
             ))}
