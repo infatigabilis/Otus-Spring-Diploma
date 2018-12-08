@@ -31,11 +31,6 @@ docker-compose build
 docker-compose up -d
 ```
 
-> Также приложение можно посмотреть на `http://104.248.30.194`. Приложение поднято через команды выше, т.е. порты Zuul,
-Eureka, Keycloak так же открыты. 
->
-> P. S. Сервак можно полностью ломать - поднять его в изначальном виде не сложно :)
-
 > Credential'ы пользователей для теста:
 > * `user1:user1` - Scott Matthews, пространство: _programming_
 > * `user2:user2` - Tilly Frank, пространство: _programming_
