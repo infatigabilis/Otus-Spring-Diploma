@@ -29,7 +29,7 @@
         <mongobee.version>0.13</mongobee.version>
         <mockito.version>2.23.0</mockito.version>
         <springfox.version>3.0.0-SNAPSHOT</springfox.version>
-        <jose-jwt.version>6.4</jose-jwt.version>
+        <jose-jwt.version>7.9</jose-jwt.version>
     </properties>
 
     <dependencies>
