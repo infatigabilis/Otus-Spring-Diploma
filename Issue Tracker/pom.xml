@@ -25,7 +25,7 @@
         <spring-cloud.version>Finchley.SR2</spring-cloud.version>
         <apache-commons.version>3.8.1</apache-commons.version>
         <apache-commons-beanutils.version>1.9.3</apache-commons-beanutils.version>
-        <google-guava.version>27.0-jre</google-guava.version>
+        <google-guava.version>29.0-jre</google-guava.version>
         <mongobee.version>0.13</mongobee.version>
         <mockito.version>2.23.0</mockito.version>
         <springfox.version>3.0.0-SNAPSHOT</springfox.version>
